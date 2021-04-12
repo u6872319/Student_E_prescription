@@ -24,6 +24,8 @@ media
 .idea/**/uiDesigner.xml
 .idea/**/gradle.xml
 .idea/**/libraries
+.idea/misc.xml
+.idea/Student_E_prescription.iml
 *.iws /out/
 
 # Python #

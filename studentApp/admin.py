@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import MedicineStatic, Patient, Form, Frequency, Route, Student, Prescription, PreToMedLog
+from .models import MedicineStatic, Patient, Form, Frequency, Route, Student, Prescription, MedicineLog
 from import_export.admin import ImportExportModelAdmin
 # Register your models here.
 
@@ -42,7 +42,7 @@ class StudentAdmin(ImportExportModelAdmin):
 
 admin.site.register(Prescription)
 # admin.site.register(MedicineLog)
-admin.site.register(PreToMedLog)
+admin.site.register(MedicineLog)
 
 # test
 # admin.site.register(MedicineStatic)

@@ -2,13 +2,58 @@ from django.db import models
 
 # Create your models here.
 
+
 # sql table: Medicine
-class Medicine(models.Model):
-    med_description = models.CharField(max_length=1000)
+# class MedicineStatic(models.Model):
+#     medName = models.CharField(primary_key=True, max_length=1000)
+
 
 # sql table: Patient (dob default format : xxxx-xx-xx)
 class Patient(models.Model):
+    # id = models.AutoField(primary_key=True, max_length=1000)
     lastname = models.CharField(max_length=1000)
     firstname = models.CharField(max_length=1000)
     dob = models.DateField()
     weight = models.CharField(max_length=1000)
+    allergen1 = models.CharField(blank=True, max_length=1000)
+    allergy1 = models.CharField(blank=True, max_length=1000)
+
+
+class Form(models.Model):
+    form = models.CharField(primary_key=True, max_length=1000)
+
+
+class Frequency(models.Model):
+    frequency = models.CharField(primary_key=True, max_length=1000)
+
+
+class Route(models.Model):
+    route = models.CharField(primary_key=True, max_length=1000)
+
+
+class Student(models.Model):
+    uid = models.CharField(primary_key=True, max_length=1000)
+
+
+class Prescription(models.Model):
+    id = models.AutoField(primary_key=True, blank=True)
+    patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE)
+    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    review = models.TextField()
+
+
+class MedicineStatic(models.Model):
+    medName = models.CharField(primary_key=True, max_length=1000)
+    pretomed = models.ManyToManyField(to=Prescription, through='PreToMedLog', max_length=1000)
+
+
+class PreToMedLog(models.Model):
+    medStatic = models.ForeignKey(MedicineStatic, on_delete=models.CASCADE)
+    prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE)
+    formDes = models.CharField(max_length=1000)
+    freDes = models.CharField(max_length=1000)
+    routeDes = models.CharField(max_length=1000)
+    doseDes = models.CharField(max_length=1000)
+
+
+

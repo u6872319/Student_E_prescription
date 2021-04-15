@@ -1,9 +1,11 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from studentApp.resources import MedicineResources
+from studentApp.resources import MedicineStaticResources
 # Create your views here.
+
+
 def export(request):
-    medicine_resource = MedicineResources()
+    medicine_resource = MedicineStaticResources()
     meds = medicine_resource.export()
     response = HttpResponse(meds.csv, content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="meds.csv"'

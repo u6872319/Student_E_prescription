@@ -6,7 +6,7 @@ from import_export.admin import ImportExportModelAdmin
 
 @admin.register(MedicineStatic)
 class MedicineStaticAdmin(ImportExportModelAdmin):
-    list_display = ('medName',)
+    list_display = ('id','medName')
     pass
 
 
@@ -18,25 +18,25 @@ class PatientAdmin(ImportExportModelAdmin):
 
 @admin.register(Form)
 class FormAdmin(ImportExportModelAdmin):
-    list_display = ('form',)
+    list_display = ('id','form')
     pass
 
 
 @admin.register(Frequency)
 class FrequencyAdmin(ImportExportModelAdmin):
-    list_display = ('frequency',)
+    list_display = ('id','frequency',)
     pass
 
 
 @admin.register(Route)
 class RouteAdmin(ImportExportModelAdmin):
-    list_display = ('route',)
+    list_display = ('id','route')
     pass
 
 
 @admin.register(Student)
 class StudentAdmin(ImportExportModelAdmin):
-    list_display = ('uid',)
+    list_display = ('id','uid')
     pass
 
 

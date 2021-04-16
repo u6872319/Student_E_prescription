@@ -20,30 +20,30 @@ class Patient(models.Model):
 
 
 class Form(models.Model):
-    form = models.CharField(primary_key=True, max_length=1000)
+    form = models.CharField(max_length=1000, blank=True)
 
 
 class Frequency(models.Model):
-    frequency = models.CharField(primary_key=True, max_length=1000)
+    frequency = models.CharField(max_length=1000)
 
 
 class Route(models.Model):
-    route = models.CharField(primary_key=True, max_length=1000)
+    route = models.CharField(max_length=1000)
 
 
 class Student(models.Model):
-    uid = models.CharField(primary_key=True, max_length=1000)
+    uid = models.CharField(max_length=1000)
 
 
 class Prescription(models.Model):
-    id = models.AutoField(primary_key=True, blank=True)
+    #id = models.AutoField(primary_key=True, blank=True)
     patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE)
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
     review = models.TextField()
 
 
 class MedicineStatic(models.Model):
-    medName = models.CharField(primary_key=True, max_length=1000)
+    medName = models.CharField(max_length=1000)
     #pretomed = models.ManyToManyField(to=Prescription, through='PreToMedLog', max_length=1000)
 
 class MedicineLog(models.Model):

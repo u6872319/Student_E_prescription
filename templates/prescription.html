@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+        <!-- import CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+        <link rel="stylesheet" type="text/css" href="prescription.css"> 
+    </head>
+    <body>
+        <p>Edit precription</p>
+        <span class="center">Patient information</span>
+        <div id="app">
+            <el-form ref="form" :model="form" label-width="230px">
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="FirstName: ">
+                            <span>{{'Stephen'}}</span>
+                          </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="LastName: ">
+                            <span>{{'Jame'}}</span>
+                          </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Pid: ">
+                            <span>{{'p5645768'}}</span>
+                          </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="Date of Birth: ">
+                            <span>{{'12/01/1984'}}</span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Weight: ">
+                            <span>{{'78kg'}}</span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Allergy: ">
+                            <span>{{'allergic asthma'}}</span>
+                          </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8" style="margin-left:5%">
+                        <el-form-item label="Description of Allergy: ">
+                            <span>{{'This allergy is ...'}}</span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <el-divider></el-divider>
+            <el-row>
+                <el-col :span="12">
+                    <div>
+                        <span>Medicine Name</span></br>
+                        <el-input
+                            placeholder="Please input"
+                            v-model="medName"
+                            clearable>
+                        </el-input>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div>
+                        <span>Dose</span></br>
+                        <el-input
+                            placeholder="Please input"
+                            v-model="dose"
+                            clearable>
+                        </el-input>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">
+                    <div>
+                        <span>Form</span></br>
+                        <el-select v-model="form" placeholder="Please choose">
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </el-col>
+                <el-col :span="6">
+                    <div>
+                        <span>Frequency</span></br>
+                        <el-select v-model="frequency" placeholder="Please choose">
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </el-col>
+                <el-col :span="6">
+                    <div>
+                        <span>Route</span></br>
+                        <el-select v-model="route" placeholder="Please choose">
+                            <el-option
+                              v-for="item in options"
+                              :key="item.value"
+                              :label="item.label"
+                              :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </el-col>
+                <el-col :span="6">
+                    <div style="text-align: center;"><el-button type="primary">Add</el-button></div>
+                </el-col>
+            </el-row>
+            <el-divider></el-divider>
+            <div style="margin: 50px; margin-right: 250px;">
+                <el-table
+                :data="tableData"
+                height
+                border>
+                    <el-table-column
+                    prop="medicineName"
+                    label="Medicine Name"
+                    width="300">
+                    </el-table-column>
+                    <el-table-column
+                    prop="dose"
+                    label="dose"
+                    width="300">
+                    </el-table-column>
+                    <el-table-column
+                    prop="form"
+                    label="Form"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column
+                    prop="frequency"
+                    label="Frequency"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column
+                    prop="route"
+                    label="Route"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column label="operation">
+                        <template slot-scope="scope">
+                        <el-button
+                            size="mini"
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <el-form ref="form" 
+                :model="form" 
+                label-width="110px" 
+                size="medium"
+                style="margin-left: 400px;">
+                <el-form-item label="Password: ">
+                    <el-input v-model="form.email" style="margin-right: 50px;"></el-input>
+                    <el-button type="primary" @click="onSubmit">Confirm</el-button>
+
+                </el-form-item>
+                
+          </el-form>
+        </div>
+    </body>
+</html>
+<!-- import Vue before Element -->
+<script src="vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+new Vue({
+    el: '#app',
+    data: function() {
+        return { 
+            medName:'',
+            dose:'',
+            options: [{
+            value: '选项1',
+            label: '1g'
+            }, {
+            value: '选项2',
+            label: '2g'
+            }, {
+            value: '选项3',
+            label: '3g'
+            }, {
+            value: '选项4',
+            label: '4g'
+            }, {
+            value: '选项5',
+            label: '5g'
+            }],
+            form: '',
+            frequency: '',
+            route: '',
+            tableData: [{
+                medicineName:'DIMETHICONE',
+                dose:'1mg',
+                form:'20%',
+                frequency:'1g/d',
+                route:'Cream',
+            }, {
+                medicineName:'DIMETHICONE',
+                dose:'1mg',
+                form:'20%',
+                frequency:'1g/d',
+                route:'Cream',
+            }],
+        }
+    },
+    method: {
+        handleDelete(index, row) {
+        console.log(index, row);
+      }
+    }
+})
+</script>

@@ -1,0 +1,28 @@
+.el-input {
+    width: 280px;
+}
+.el-row {
+    margin:50px;
+}
+.el-button {
+    font-size: 19px !important;
+    width: 140px;
+}
+
+p {
+    margin:50px;
+    font-size: 2em; 
+}
+
+.el-form-item__label {
+    font-size: 20px !important;
+  }
+
+  span {
+    font-size: 20px;
+  }
+
+  .center {
+    display:flex;
+    justify-content:center;
+  }

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <!-- import CSS -->
+      <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+      <link rel="stylesheet" type="text/css" href="Assessor.css"> 
+  </head>
+  <body>
+    <p class="title">ASSESSOR MARKING SYSTEM</p>
+    <div id="app" class="center">
+        <el-table
+        :data="tableData"
+        class="center"
+        >
+        <el-table-column
+            prop="uid"
+            label="Student ID"
+            width="180">
+        </el-table-column>
+        <el-table-column
+            prop="detail"
+            label="operation"
+            width="180">
+            <template slot-scope="scope">
+                <el-button @click="handleClick(scope.row)" type="text" size="medium">detail</el-button>
+            </template>
+        </el-table-column>
+        </el-table>
+    </div>
+  </body>
+</html>
+<!-- import Vue before Element -->
+<script src="vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+  new Vue({
+    el: '#app',
+    data: function() {
+        return { 
+            tableData: [{
+                uid: 'u12234567',
+            }, {
+                uid: 'u23456782',
+            },{
+                uid: 'u34567891',
+            },{
+                uid: 'u45678912',
+            },{
+                uid: 'u56748392',
+            },{
+                uid: 'u58697054',
+            },{
+                uid: 'u56473821',
+            }]
+        }
+    },
+    methods: {
+        handleClick(row) {
+            console.log(row);
+        }
+}
+  })
+</script>

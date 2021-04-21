@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+        <!-- import CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+        <link rel="stylesheet" type="text/css" href="prescription.css"> 
+    </head>
+    <body>
+        <p>Edit precription</p>
+        <span class="center">Patient information</span>
+        <div id="app">
+            <el-form ref="form" :model="form" label-width="230px">
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="FirstName: ">
+                            <span>{{'Stephen'}}</span>
+                          </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="LastName: ">
+                            <span>{{'Jame'}}</span>
+                          </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Pid: ">
+                            <span>{{'p5645768'}}</span>
+                          </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="Date of Birth: ">
+                            <span>{{'12/01/1984'}}</span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Weight: ">
+                            <span>{{'78kg'}}</span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Allergy: ">
+                            <span>{{'allergic asthma'}}</span>
+                          </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8" style="margin-left:5%">
+                        <el-form-item label="Description of Allergy: ">
+                            <span>{{'This allergy is ...'}}</span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <el-divider></el-divider>
+            <p>Student ID: {{"u12234567"}}<p>
+            <div style="margin: 50px; margin-right: 250px;">
+                <el-table
+                :data="tableData"
+                height>
+                    <el-table-column
+                    prop="medicineName"
+                    label="Medicine Name"
+                    width="300">
+                    </el-table-column>
+                    <el-table-column
+                    prop="dose"
+                    label="dose"
+                    width="300">
+                    </el-table-column>
+                    <el-table-column
+                    prop="form"
+                    label="Form"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column
+                    prop="frequency"
+                    label="Frequency"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column
+                    prop="route"
+                    label="Route"
+                    width="200">
+                    </el-table-column>
+                </el-table>
+            </div>
+            <el-divider></el-divider>
+            <p>Feedback<p>
+            <div class="feedback">
+                <el-form ref="form" :model="form" label-width="120px">
+                    <el-form-item label="Mark: ">
+                        <el-select v-model="form.mark" placeholder="Please select a mark">
+                        <el-option label="HD" value="hd"></el-option>
+                        <el-option label="D" value="d"></el-option>
+                        <el-option label="C" value="c"></el-option>
+                        <el-option label="P" value="p"></el-option>
+                        <el-option label="F" value="f"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="Comments: ">
+                        <el-input type="textarea" v-model="form.comment"></el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">Send</el-button>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </div>
+    </body>
+</html>
+<!-- import Vue before Element -->
+<script src="vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script>
+new Vue({
+    el: '#app',
+    data: function() {
+        return { 
+            tableData: [{
+                medicineName:'DIMETHICONE',
+                dose:'1mg',
+                form:'20%',
+                frequency:'1g/d',
+                route:'Cream',
+            }, {
+                medicineName:'DIMETHICONE',
+                dose:'1mg',
+                form:'20%',
+                frequency:'1g/d',
+                route:'Cream',
+            }],
+            form: {
+                mark:'',
+                comment:'',
+            }
+        }
+    },
+    method: {
+        onSubmit() {
+        console.log('submit!');
+      }
+    }
+})
+</script>

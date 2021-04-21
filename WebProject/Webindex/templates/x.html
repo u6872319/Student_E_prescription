@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<body>
+  <form action="/search/" method="get" value=" sssss">
+        <input type="text" name="q">
+        <input type="submit" value="get方法传值">
+    </form>
+
+ <form action="/search-post/" method="post">
+        {% csrf_token %}
+        <input type="text" name="q">
+        <input type="submit" value="post 方法传值">
+    </form>
+  <p>
+      <a href="{% url 'yq' %}">link text</a> // Django url 里面的 Name
+<!--&lt;!&ndash;      <a href="y.html">link text</a>&ndash;&gt;  不能用-->
+  </p>
+ <form action="/json1/" method="post">
+     <div># the name json find in url</div>
+        {% csrf_token %}
+        <input type="text" name="json_method">
+        <input type="submit" value="post json">
+ </form>
+
+<div>
+<input type="text" id="txt1">
+<input type="button" value="TEST" onclick="test()"/>
+<input type="text" id="txt2" value='1'                   >
+</div>
+  <p>the p</p>
+<div>{{ data }}</div>
+
+</body>
+<SCRIPT LANGUAGE="JavaScript">
+function
+ test(){
+var s =document.getElementById("txt1");
+
+alert(12312)
+return s
+
+ }
+
+ </SCRIPT>
+</html>

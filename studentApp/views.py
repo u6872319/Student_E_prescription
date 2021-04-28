@@ -125,20 +125,22 @@ def prescriptionlist(request):
 
 
 @api_view(['GET'])
-def prescription_unique(request):
-    try:
-        prescription = Prescription.objects.create(Patient(pk = request.GET['patientPk']),
-                                                  Student(pk = request.GET['uid']))
-        prescription.save()
-    except Prescription.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
-
+def prescription_unique(request,pk):
     if request.method == 'GET':
+        prescription = Prescription.objects.get(pk=pk)
         serializer = PrescriptionSerializer(prescription)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    if request.method == 'POST':
+        try:
+            prescription = Prescription.objects.create(Patient(pk=request.GET['patientPk']),
+                                                       Student(pk=request.GET['uid']))
+            prescription.save()
+        except Prescription.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
@@ -162,7 +164,6 @@ def medicineLog_forOnePres(request):
             return Response(status=status.HTTP_404_NOT_FOUND)
         serializer = MedicineLogSerializer(medicineLog)
         serializer.save()
-        pass
 
     elif request.method == 'DELETE':
         try:
@@ -170,7 +171,6 @@ def medicineLog_forOnePres(request):
         except MedicineLog.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         medicineLog.delete()
-        pass
 
 
 

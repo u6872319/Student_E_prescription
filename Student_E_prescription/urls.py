@@ -15,11 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from studentApp import views
-from django.conf.urls import url
+from django.conf.urls import url, include
+from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
+
     path('admin/', admin.site.urls),
     #path('', views.index),
     #url(r'^export-csv/$', views.export, name='export')
+    url(r'^', include('studentApp.urls')),
+
 ]

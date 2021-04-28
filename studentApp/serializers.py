@@ -35,6 +35,7 @@ class MedicineLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicineLog
         fields = '__all__'
+        depth = 3
 
 class PrescriptionSerializer(serializers.ModelSerializer):
     class Meta:

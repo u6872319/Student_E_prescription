@@ -39,7 +39,7 @@ class Prescription(models.Model):
     #id = models.AutoField(primary_key=True, blank=True)
     patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE)
     student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
-    review = models.TextField()
+    review = models.TextField(blank=True)
 
 
 class MedicineStatic(models.Model):

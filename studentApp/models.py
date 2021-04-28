@@ -47,7 +47,7 @@ class MedicineStatic(models.Model):
     #pretomed = models.ManyToManyField(to=Prescription, through='PreToMedLog', max_length=1000)
 
 class MedicineLog(models.Model):
-    prescription = models.ForeignKey(to=Prescription, on_delete=models.CASCADE)
+    prescription = models.ForeignKey(to=Prescription, on_delete=models.PROTECT)
     medEdited = models.CharField(max_length=1000)
     formDes = models.CharField(max_length=1000)
     freDes = models.CharField(max_length=1000)

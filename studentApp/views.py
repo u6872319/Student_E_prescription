@@ -179,7 +179,7 @@ def medicineLog_forOnePres(request):
 
     elif request.method == 'DELETE':
         try:
-            medicineLog = MedicineLog.objects.get(request.GET['medlogID'])
+            medicineLog = MedicineLog.objects.get(request.DELETE['medlogID'])
         except MedicineLog.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         medicineLog.delete()

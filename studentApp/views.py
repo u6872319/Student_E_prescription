@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 # from .resources import MedicineStaticResources
 from rest_framework import status
@@ -209,3 +209,16 @@ def routelist(request):
         routes = Route.objects.all()
         serializer = RouteSerializer(routes, many=True)
         return Response(serializer.data)
+
+
+def login(request):
+    return render(request, 'login.html')
+
+
+def patientConfirm(request):
+    return render(request, 'patientConfirm.html')
+
+
+def patientSelect(request):
+    return render(request, 'patientSelect.html')
+# Create your views here.

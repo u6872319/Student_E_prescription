@@ -1,0 +1,9 @@
+.el-select .el-input {
+    width: 130px;
+  }
+
+  p {
+    margin:50px;
+    font-size: 2em; 
+    text-align: center;
+}

@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
+from studentApp import views
 
 urlpatterns = [
 
@@ -24,5 +25,8 @@ urlpatterns = [
     #path('', views.index),
     #url(r'^export-csv/$', views.export, name='export')
     url(r'^', include('studentApp.urls')),
-
+    # path('admin/', admin.site.urls),
+    path('login/', views.login),
+    path('patientConfirm/', views.patientConfirm, name="patientConfirm"),
+    path('patientSelect/', views.patientSelect, name="patientSelect"),
 ]

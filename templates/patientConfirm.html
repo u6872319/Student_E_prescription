@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- import CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+  <link rel="stylesheet" type="text/css" href="/static/css/patientConfirm.css"> 
+</head>
+<body>
+    <p>Patient</p>
+    <div id="app">
+        <el-form ref="form" :model="form" label-width="180px">
+            <el-row>
+                <el-col :span="12">
+                    <div class="grid-content bg-purple">
+                    <el-form-item label="FirstName: ">
+                        <span>{{patient.firstname}}</span>
+                        </el-form-item>
+                    </div> 
+                </el-col>
+                <el-col :span="12">
+                    <div>
+                        <el-form-item label="LastName: ">
+                        <span>{{patient.lastname}}</span>
+                        </el-form-item>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div>
+                        <el-form-item label="Pid: ">
+                        <span>{{patient.id}}</span>
+                        </el-form-item>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div>
+                        <el-form-item label="Date of Birth: ">
+                        <span>{{patient.dob}}</span>
+                        </el-form-item>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div>
+                        <el-form-item label="Weight: ">
+                        <el-input v-model="form.weight" style="width: 120px;"><span>{{patient.weight}}</span></el-input>
+                        </el-form-item>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-row>
+                <div class="center">           
+                    <el-form-item label="Have allergy or not">
+                    <el-radio-group v-model="form.allergy">
+                        <el-radio :label="1">Yes</el-radio>
+                        <el-radio :label="2">No</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
+                    <el-form-item label="Allergy: " v-if="form.allergy===1">
+                    <el-input v-model="form.allgyName" style="width: 120px;"></el-input>
+                    </el-form-item>
+                    <el-form-item label="Description of Allergy: " v-if="form.allergy===1">
+                    <el-input v-model="form.allergyDescription" style="width: 120px;"></el-input>
+                    </el-form-item>
+                </div> 
+            </el-row>
+        </el-form>
+        <div style="text-align: center;"><el-button type="primary" @click="onSubmit">Confirm</el-button></div>
+    </div>
+</body>
+</html>
+  <!-- import Vue before Element -->
+  <script src="/static/js/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return { 
+            form: {
+                allergy:2,
+                allgyName:'',
+                allergyDescription:'',
+                weight:'',
+
+            },
+            param: {},
+            patient: {},
+         }
+      },
+      created(){
+          this.getPtient()
+      },
+      methods: {
+            onSubmit(){
+                this.patientPost();
+            },
+            getPtient() {
+                axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
+                params: {
+                    id: this.param
+                    }
+            })
+                .then(function (res) {
+                    this.patient = res.data
+                })
+                .catch(function (error) {
+                console.log(error);
+                });
+            },
+            activated() {
+                var param = localStorage.getItem("searchParam");
+                this.param = param;
+            },
+            patientPost() {
+                axios.put(`http://127.0.0.1:8000/patientlist/${this.param}`, {
+                id: this.param,
+                editedweight: this.form.weight,
+                allergen1: this.form.allgyName,
+                allergy1: this.allergyDescription,
+            })
+            .then(function (response) {
+            console.log(response);
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+            }
+            
+    }
+
+    })
+  </script>

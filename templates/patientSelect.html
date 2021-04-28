@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/patientSelect.css"> 
+  </head>
+  <body> 
+    <p>​Select a patient</p> 
+    <div id="app"> 
+      <el-row>
+        <el-col :span="12">
+          <div style="margin-top:60px;"> 
+            <el-autocomplete
+              v-model="input"
+              :fetch-suggestions="querySearch" 
+              @select="handleSelect">
+              <el-select v-model="value" slot="prepend" placeholder="Select" @change="select">
+                <el-option
+                  v-for="item in options"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value">
+                </el-option>
+              </el-select>
+            </el-autocomplete>
+            <a href="{% url 'patientConfirm'%}"><el-button slot="append" icon="el-icon-search" @click="onSubmit"></el-button></a>
+          </div>
+        </el-col>
+        <el-col :span="12">
+          <el-form ref="form" :model="form" label-width="180px">
+            <el-form-item label="FirstName: ">
+                <span>{{patient.firstname}}</span>
+              </el-form-item>
+              <el-form-item label="LastName: ">
+                <span>{{patient.lastname}}</span>
+              </el-form-item>
+              <el-form-item label="Pid: ">
+                <span>{{patient.id}}</span>
+              </el-form-item>
+              <el-form-item label="Date of Birth: ">
+                <span>{{patient.id}}</span>
+              </el-form-item>
+              <el-form-item label="Weight: ">
+                <span>{{patient.weight}}</span>
+            </el-form-item>
+          </el-form>
+        </el-col>
+      </el-row>
+    </div>
+  </body>
+</html>
+  <!-- import Vue before Element -->
+  <script src="/static/js/vue.js"></script>
+  <!-- import JavaScript -->
+  <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script>
+    new Vue({
+      el: '#app',
+      data: function() {
+        return {
+            options: [{
+                value: 'choose1',
+                label: 'Pid'
+                }, {
+                value: 'choose2',
+                label: 'Last name'
+                }, {
+                value: 'choose3',
+                label: 'First name'
+            }],
+            value: '',
+            input: '',
+            form: {},
+            patients: [],
+            firstName: [],
+            lastName: [],
+            Pid: [],
+            alreadyChoose: {},
+            all:[],
+            uid:'',
+            patient: {},
+            param: {},
+
+        }
+      },
+      mounted() {
+         this.getAllPtient();
+
+      },
+      watch: {
+
+      },
+      methods: {
+        handleSelect(item) {
+          for(var item in this.all){
+            if(item.firstName===item){
+              this.alreadyChoose = item
+
+            }else if(item.lastname===item){
+              this.alreadyChoose = item
+
+            }else if (item.lastname===item){
+              this.alreadyChoose = item
+            };
+          };
+          this.getOnePtient();
+        },
+        getAllPtient() {
+          axios.get('http://127.0.0.1:8000/patientlist/')
+            .then(function (res) {
+                this.patients = res.data
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+        getOnePtient() {
+          axios.get(`http://127.0.0.1:8000/patientlist/${this.input}`, {
+             params: {
+               id: this.input
+                }
+          })
+            .then(function (res) {
+                this.patient = res.data
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+
+        querySearch(queryString, cb) {
+          var patients = this.patients;
+          var restaurants = this.restaurants;
+          var results = queryString ? patients.filter(this.createFilter(queryString)) : patients;
+          cb(results);
+        },
+        createFilter(queryString) {
+          return (patient) => {
+              return (patient.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            }
+        },
+        onSubmit(){
+
+        },
+        select(){
+          this.all = this.patients
+          if(this.value==="choose1"){
+            this.patients = this.all.map(item => ({value:item.id}));
+          }else if (this.value==="choose2"){
+            this.patients = this.all.map(item => ({value:item.firstName}));
+
+          }else if (this.value==="choose3"){
+            this.patients = this.all.map(item => ({value:item.lastName}));
+          };
+
+
+        },
+        search() {
+            localStorage.setItem("searchParam", JSON.stringify(this.param));
+        },
+
+        loadAll() {
+          return [
+            {'firstName':'Jarvis','lastName':'Huang','Pid':'1'},{'firstName':'Xiaoliang','lastName':'Jia','Pid':'2'},
+          ]
+      }
+
+    }
+    })
+  </script>

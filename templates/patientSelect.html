@@ -24,8 +24,8 @@
                   :value="item.value">
                 </el-option>
               </el-select>
-              <el-button slot="append" icon="el-icon-search" @click="onSubmit"></el-button>
             </el-autocomplete>
+            <a href="{% url 'patientConfirm'%}"><el-button slot="append" icon="el-icon-search" @click="onSubmit"></el-button></a>
           </div>
         </el-col>
         <el-col :span="12">
@@ -45,9 +45,9 @@
               <el-form-item label="Weight: ">
                 <span>{{patient.weight}}</span>
             </el-form-item>
-          </el-form> 
+          </el-form>
         </el-col>
-      </el-row>  
+      </el-row>
     </div>
   </body>
 </html>
@@ -60,7 +60,7 @@
     new Vue({
       el: '#app',
       data: function() {
-        return { 
+        return {
             options: [{
                 value: 'choose1',
                 label: 'Pid'
@@ -88,10 +88,10 @@
       },
       mounted() {
          this.getAllPtient();
-        
+
       },
       watch: {
- 
+
       },
       methods: {
         handleSelect(item) {
@@ -104,7 +104,7 @@
 
             }else if (item.lastname===item){
               this.alreadyChoose = item
-            };            
+            };
           };
           this.getOnePtient();
         },
@@ -118,7 +118,7 @@
             });
         },
         getOnePtient() {
-          axios.get(`http://127.0.0.1:8000/patientlist/${this.input}` {
+          axios.get(`http://127.0.0.1:8000/patientlist/${this.input}`, {
              params: {
                id: this.input
                 }
@@ -135,7 +135,7 @@
           var patients = this.patients;
           var restaurants = this.restaurants;
           var results = queryString ? patients.filter(this.createFilter(queryString)) : patients;
-          cb(results);  
+          cb(results);
         },
         createFilter(queryString) {
           return (patient) => {
@@ -143,12 +143,12 @@
             }
         },
         onSubmit(){
-          
+
         },
         select(){
-          this.all = this.patients
+          this.all = this.loadAll()
           if(this.value==="choose1"){
-            this.patients = this.all.map(item => ({value:item.Pid}));   
+            this.patients = this.all.map(item => ({value:item.Pid}));
           }else if (this.value==="choose2"){
             this.patients = this.all.map(item => ({value:item.firstName}));
 
@@ -156,7 +156,7 @@
             this.patients = this.all.map(item => ({value:item.lastName}));
           };
 
-          
+
         },
         search() {
             localStorage.setItem("searchParam", JSON.stringify(this.param));
@@ -164,7 +164,7 @@
 
         loadAll() {
           return [
-            {'firstName':'j','lastName':'l','Pid':'1'},{'firstName':'s','lastName':'d','Pid':'2'}
+            {'firstName':'Jarvis','lastName':'Huang','Pid':'1'},{'firstName':'Xiaoliang','lastName':'Jia','Pid':'2'},
           ]
       }
 

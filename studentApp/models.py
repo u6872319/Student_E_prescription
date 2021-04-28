@@ -37,8 +37,8 @@ class Student(models.Model):
 
 class Prescription(models.Model):
     #id = models.AutoField(primary_key=True, blank=True)
-    patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE)
-    student = models.ForeignKey(to=Student, on_delete=models.CASCADE)
+    patient = models.ForeignKey(to=Patient, on_delete=models.PROTECT)
+    student = models.ForeignKey(to=Student, on_delete=models.PROTECT)
     review = models.TextField(blank=True)
 
 

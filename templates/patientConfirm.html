@@ -14,35 +14,35 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                     <el-form-item label="FirstName: ">
-                        <span>{{'Stephen'}}</span>
+                        <span>{{patient.firstname}}</span>
                         </el-form-item>
                     </div> 
                 </el-col>
                 <el-col :span="12">
                     <div>
                         <el-form-item label="LastName: ">
-                        <span>{{'Jame'}}</span>
+                        <span>{{patient.lastname}}</span>
                         </el-form-item>
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <div>
                         <el-form-item label="Pid: ">
-                        <span>{{'p5645768'}}</span>
+                        <span>{{patient.id}}</span>
                         </el-form-item>
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <div>
                         <el-form-item label="Date of Birth: ">
-                        <span>{{'12/01/1984'}}</span>
+                        <span>{{patient.dob}}</span>
                         </el-form-item>
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <div>
                         <el-form-item label="Weight: ">
-                        <el-input v-model="form.weight" style="width: 120px;"></el-input>
+                        <el-input v-model="form.weight" style="width: 120px;"><span>{{patient.weight}}</span></el-input>
                         </el-form-item>
                     </div>
                 </el-col>
@@ -65,21 +65,70 @@
             </el-row>
         </el-form>
         <div style="text-align: center;"><el-button type="primary" @click="onSubmit">Confirm</el-button></div>
+    </div>
 </body>
 </html>
   <!-- import Vue before Element -->
   <script src="vue.js"></script>
   <!-- import JavaScript -->
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
     new Vue({
       el: '#app',
       data: function() {
         return { 
             form: {
-                allergy:2
+                allergy:2,
+                allgyName:'',
+                allergyDescription:'',
+                weight:'',
+
             },
+            param: {},
+            patient: {},
          }
-      }
+      },
+      created(){
+          this.getPtient()
+      },
+      methods: {
+            onSubmit(){
+                this.patientPost();
+            },
+            getPtient() {
+                axios.get('http://127.0.0.1:8000/patientlist/'+this.param, {
+                params: {
+                    id: this.param
+                    }
+            })
+                .then(function (res) {
+                    this.patient = res.data
+                })
+                .catch(function (error) {
+                console.log(error);
+                });
+            },
+            activated() {
+                var param = localStorage.getItem("searchParam");
+                this.param = param;
+            },
+            patientPost() {
+                axios.put('http://127.0.0.1:8000/patientlist/'+this.param, {
+                id: this.param,
+                editedweight: this.form.weight,
+                allergen1: this.form.allgyName,
+                allergy1: this.allergyDescription,
+            })
+            .then(function (response) {
+            console.log(response);
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+            }
+            
+    }
+
     })
   </script>

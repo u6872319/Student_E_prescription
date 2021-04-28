@@ -33,21 +33,39 @@
 <script src="vue.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
   new Vue({
     el: '#app',
     data: function() {
       return { 
-        form: {
-            email:'',
-            password:'',
-        }
-        }
+        form:{
+          email:'',
+          password:'',
+        }          
+      }
+    },
+    watch:{
     },
     methods: {
       onSubmit() {
-        console.log('submit!');
-      }
+        this.studentPost();
+      },
+
+      studentPost() {
+        axios.post('/user', {
+          uid: this.form.email,
+          })
+          .then(function (response) {
+          console.log(response);
+          })
+          .catch(function (error) {
+          console.log(error);
+          });
+      },
+
+
+
 }
   })
 </script>

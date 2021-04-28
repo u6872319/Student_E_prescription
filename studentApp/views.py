@@ -129,10 +129,8 @@ def prescription_unique(request,pk):
     if request.method == 'GET':
         prescription = Prescription.objects.get(pk=pk)
         serializer = PrescriptionSerializer(prescription)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.data)
+        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == 'POST':
         try:
@@ -141,24 +139,39 @@ def prescription_unique(request,pk):
             prescription.save()
         except Prescription.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
+        prescription = Prescription.objects.get(pk=pk)
+        serializer = PrescriptionSerializer(prescription)
+        if serializer.is_valid():
+            serializer.save()
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
-def medicineLog_forOnePres(request):
 
+@api_view(['GET'])
+def medicineloglist(request):
     if request.method == 'GET':
-        medicinelogs = MedicineLog(Prescription(pk = request.GET['presid']), many = True)
+        medicinelogs = MedicineLog.objects.all()
         serializer = MedicineLogSerializer(medicinelogs, many=True)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
+
+
+@api_view(['GET', 'POST', 'DELETE'])
+def medicineLog_forOnePres(request,presid):
+
+    if request.method == 'GET':
+        prescription = Prescription(pk = presid)
+        medicinelogs = MedicineLog.objects.get(prescription)
+        serializer = MedicineLogSerializer(medicinelogs, many=True)
+        return Response(serializer.data)
+
+    elif request.method == 'POST':
         try:
-            medicineLog = MedicineLog.objects.get_or_create(Prescription(pk=request.GET['presid']),
-                                                            medEdited=request.GET['medEdited'],
-                                                            formDes=request.GET['form'],
-                                                            freDes=request.GET['frequency'],
-                                                            routeDes=request.GET['route'],
-                                                            doseDes=request.GET['dose'])
+            medicineLog = MedicineLog.objects.get_or_create(Prescription(pk=request.POST['presid']),
+                                                            medEdited=request.POST['medEdited'],
+                                                            formDes=request.POST['form'],
+                                                            freDes=request.POST['frequency'],
+                                                            routeDes=request.POST['route'],
+                                                            doseDes=request.POST['dose'])
             medicineLog.save()
         except Exception:
             return Response(status=status.HTTP_404_NOT_FOUND)

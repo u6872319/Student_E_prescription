@@ -97,7 +97,7 @@
                 this.patientPost();
             },
             getPtient() {
-                axios.get('http://127.0.0.1:8000/patientlist/'+this.param, {
+                axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
                 params: {
                     id: this.param
                     }
@@ -114,7 +114,7 @@
                 this.param = param;
             },
             patientPost() {
-                axios.put('http://127.0.0.1:8000/patientlist/'+this.param, {
+                axios.put(`http://127.0.0.1:8000/patientlist/${this.param}`, {
                 id: this.param,
                 editedweight: this.form.weight,
                 allergen1: this.form.allgyName,

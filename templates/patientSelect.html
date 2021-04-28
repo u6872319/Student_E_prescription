@@ -118,7 +118,7 @@
             });
         },
         getOnePtient() {
-          axios.get('http://127.0.0.1:8000/patientlist/'+this.input, {
+          axios.get(`http://127.0.0.1:8000/patientlist/${this.input}` {
              params: {
                id: this.input
                 }

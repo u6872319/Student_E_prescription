@@ -139,7 +139,6 @@ def prescription_unique(request,pk):
             prescription.save()
         except Prescription.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
-        prescription = Prescription.objects.get(pk=pk)
         serializer = PrescriptionSerializer(prescription)
         if serializer.is_valid():
             serializer.save()
@@ -156,10 +155,10 @@ def medicineloglist(request):
 
 
 @api_view(['GET', 'POST', 'DELETE'])
-def medicineLog_forOnePres(request,presid):
+def medicineLog_forOnePres(request):
 
     if request.method == 'GET':
-        prescription = Prescription(pk = presid)
+        prescription = Prescription(pk = request.GET['presid'])
         medicinelogs = MedicineLog.objects.get(prescription)
         serializer = MedicineLogSerializer(medicinelogs, many=True)
         return Response(serializer.data)

@@ -37,22 +37,22 @@ class Student(models.Model):
 
 class Prescription(models.Model):
     #id = models.AutoField(primary_key=True, blank=True)
-    patient = models.ForeignKey(to=Patient, on_delete=models.PROTECT)
-    student = models.ForeignKey(to=Student, on_delete=models.PROTECT)
+    patient = models.ForeignKey(to=Patient, on_delete=models.PROTECT, blank=True)
+    student = models.ForeignKey(to=Student, on_delete=models.PROTECT, blank=True)
     review = models.TextField(blank=True)
 
 
 class MedicineStatic(models.Model):
     medName = models.CharField(max_length=1000)
-    #pretomed = models.ManyToManyField(to=Prescription, through='PreToMedLog', max_length=1000)
+
 
 class MedicineLog(models.Model):
     prescription = models.ForeignKey(to=Prescription, on_delete=models.PROTECT)
-    medEdited = models.CharField(max_length=1000)
-    formDes = models.CharField(max_length=1000)
-    freDes = models.CharField(max_length=1000)
-    routeDes = models.CharField(max_length=1000)
-    doseDes = models.CharField(max_length=1000)
+    medEdited = models.CharField(max_length=1000,blank=True)
+    formDes = models.CharField(max_length=1000,blank=True)
+    freDes = models.CharField(max_length=1000,blank=True)
+    routeDes = models.CharField(max_length=1000,blank=True)
+    doseDes = models.CharField(max_length=1000,blank=True)
 
 # class PreToMedLog(models.Model):
 #     medStatic = models.ForeignKey(MedicineStatic, on_delete=models.CASCADE)

@@ -6,6 +6,9 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .models import MedicineStatic, Patient, Form, Frequency, Route, Student, Prescription, MedicineLog
 from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializer,FrequencySerializer,RouteSerializer,StudentSerializer, MedicineLogSerializer,PrescriptionSerializer
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 # Create your views here.
 
@@ -33,8 +36,8 @@ def patientlist(request):
         return Response(serializer.data)
 
 
-# Need the primary key for Patient from the front end (for 'Put' method)
-@api_view(['GET', 'PUT'])
+
+@api_view(['GET', 'PATCH'])
 def patient_unique(request, pk):
     try:
         patient = Patient.objects.get(pk = pk)
@@ -45,12 +48,15 @@ def patient_unique(request, pk):
         serializer = PatientSerializer(patient)
         return Response(serializer.data)
 
-    elif request.method == 'PUT':
-        patient.weight = request.PUT['editedweight']
-        patient.allergen1 = request.PUT['allergen1']
-        patient.allergy1 = request.PUT['allergy1']
-        patient.save()
-        serializer = PatientSerializer(patient)
+    elif request.method == 'PATCH':
+        # patient.weight = request.data['weight']
+        # patient.allergen1 = request.data['allergen1']
+        # patient.allergy1 = request.data['allergy1']
+        # patient.save()
+        if request.data['weight'] == "":
+            serializer = PatientSerializer(patient)
+            return Response(serializer.data)
+        serializer = PatientSerializer(patient,data = request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -60,36 +66,36 @@ def patient_unique(request, pk):
 @api_view(['GET'])
 def patientlast(request, lastname):
     try:
-        patient = Patient.objects.get(lastname = lastname)
+        patients = Patient.objects.get(lastname = lastname)
     except Patient.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PatientSerializer(patient)
+        serializer = PatientSerializer(patients, many=True)
         return Response(serializer.data)
 
 
 @api_view(['GET'])
 def patientfirst(request, firstname):
     try:
-        patient = Patient.objects.get(firstname = firstname)
+        patients = Patient.objects.get(firstname = firstname)
     except Patient.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PatientSerializer(patient)
+        serializer = PatientSerializer(patients)
         return Response(serializer.data)
 
 
 @api_view(['GET'])
 def patientlastfirst(request, lastname, firstname):
     try:
-        patient = Patient.objects.get(lastname = lastname, firstname = firstname)
+        patients = Patient.objects.get(lastname = lastname, firstname = firstname)
     except Patient.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'GET':
-        serializer = PatientSerializer(patient)
+        serializer = PatientSerializer(patients,many=True)
         return Response(serializer.data)
 
 
@@ -116,73 +122,89 @@ def student_unique(request, uid):
         serializer = StudentSerializer(student)
         return Response(serializer.data)
 
-
-@api_view(['GET'])
+#GET:获得所有现存的prescription instances  PUT:给我'pid'(patient id)和‘sid’(student id), 返回一个新建的药方的所有字段
+#url: http://127.0.0.1:8000/prescriptionlist/
+@api_view(['GET','PUT'])
 def prescriptionlist(request):
-    prescriptions = Prescription.objects.all()
-    serializer = PrescriptionSerializer(prescriptions, many=True)
-    return Response(serializer.data)
+    if request.method == 'GET':
+        prescriptions = Prescription.objects.all()
+        serializer = PrescriptionSerializer(prescriptions, many=True)
+        return Response(serializer.data)
 
-
+    if request.method == 'PUT':
+        # get a patient instance
+        patient = Patient.objects.get(id=request.data['pid'])
+        # get a student instance
+        student = Student.objects.get(id=request.data['sid'])
+        # create a prescription instance
+        prescription = Prescription.objects.create(patient=patient, student=student)
+        serializer = PrescriptionSerializer(prescription, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        return Response(serializer.data)
+        
+#GET:根据药方id获得一个指定的药方instance
+#url:http://127.0.0.1:8000/prescriptionlist/药方id/
 @api_view(['GET'])
 def prescription_unique(request,pk):
     if request.method == 'GET':
         prescription = Prescription.objects.get(pk=pk)
         serializer = PrescriptionSerializer(prescription)
         return Response(serializer.data)
-        # return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    if request.method == 'POST':
-        try:
-            prescription = Prescription.objects.create(Patient(pk=request.GET['patientPk']),
-                                                       Student(pk=request.GET['uid']))
-            prescription.save()
-        except Prescription.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = PrescriptionSerializer(prescription)
-        if serializer.is_valid():
-            serializer.save()
 
 
 
-@api_view(['GET'])
+#GET:获得所有学生填写的medicine条目（应该没啥用）
+#PUT：给我‘preid’(药方id)，'medEdited'(学生填写的一个药品名)，‘form’(学生填写的药品名对应的form)， ‘frequency’（学生填写的药品名
+# 对应的frequency）， ‘route’（学生填写的药品名对应的route）， ‘dose’（学生填写的药品名对应的dose），给你返回跟这个药方id绑定的所有
+# medicine的字段(每条药品写完按下add键触发)
+#url: http://127.0.0.1:8000/medicineloglist/
+@api_view(['GET', 'PUT'])
 def medicineloglist(request):
     if request.method == 'GET':
         medicinelogs = MedicineLog.objects.all()
         serializer = MedicineLogSerializer(medicinelogs, many=True)
         return Response(serializer.data)
+    elif request.method == 'PUT':
+        prescription = Prescription.objects.get(id=request.data['preid'])
+        medicinelog = MedicineLog.objects.create(prescription=prescription,
+                                                medEdited=request.data['medEdited'],
+                                                formDes=request.data['form'],
+                                                freDes=request.data['frequency'],
+                                                routeDes=request.data['route'],
+                                                doseDes=request.data['dose'])
+        serializer = MedicineLogSerializer(medicinelog, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+        medicinelogs = MedicineLog.objects.all().filter(prescription = prescription)
+        serializer2 = MedicineLogSerializer(medicinelogs, many=True)
+        # if serializer2.is_valid():
+        #     serializer.save()
+        return Response(serializer2.data)
 
-
-
-@api_view(['GET', 'POST', 'DELETE'])
-def medicineLog_forOnePres(request):
+#GET：根据medicinelog的id获得一条对应medicinelog的信息（应该没啥用）
+#DELETE：根据medicinelog的id删除一条对应medicinelog的信息（学生删除自己写的medicine条目时，点击delete按键时触发）
+#url: http://127.0.0.1:8000/medicineloglist/对应一条medicinelog的id
+@api_view(['GET','DELETE'])
+def medicineLog_forOnePres(request,pk):
 
     if request.method == 'GET':
-        prescription = Prescription(pk = request.GET['presid'])
-        medicinelogs = MedicineLog.objects.get(prescription)
-        serializer = MedicineLogSerializer(medicinelogs, many=True)
+        medicinelog = MedicineLog.objects.get(pk = pk)
+        serializer = MedicineLogSerializer(medicinelog)
         return Response(serializer.data)
-
-    elif request.method == 'POST':
-        try:
-            medicineLog = MedicineLog.objects.get_or_create(Prescription(pk=request.POST['presid']),
-                                                            medEdited=request.POST['medEdited'],
-                                                            formDes=request.POST['form'],
-                                                            freDes=request.POST['frequency'],
-                                                            routeDes=request.POST['route'],
-                                                            doseDes=request.POST['dose'])
-            medicineLog.save()
-        except Exception:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        serializer = MedicineLogSerializer(medicineLog)
-        serializer.save()
-
     elif request.method == 'DELETE':
-        try:
-            medicineLog = MedicineLog.objects.get(request.DELETE['medlogID'])
-        except MedicineLog.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-        medicineLog.delete()
+        medicinelog = MedicineLog.objects.get(pk=pk)
+        medicinelog.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+@api_view(['POST'])
+def prebased_medlogs(request):
+    if request.method == 'POST':
+        prescription = Prescription.objects.get(pk = request.data['preid'])
+        medicinelogs = MedicineLog.objects.all().filter(prescription = prescription)
+        serilalizer = MedicineLogSerializer(medicinelogs, many=True)
+        return Response(serilalizer.data)
 
 
 

@@ -12,6 +12,7 @@ class MedicineStaticResources(resources.ModelResource):
 class PatientResources(resources.ModelResource):
     class Meta:
         model = Patient
+        import_id_fields = ['id']
 
 
 class FormResources(resources.ModelResource):

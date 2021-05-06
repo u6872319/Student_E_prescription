@@ -35,10 +35,19 @@ class MedicineLogSerializer(serializers.ModelSerializer):
     class Meta:
         model = MedicineLog
         fields = '__all__'
-        depth = 3
+        depth = 4
 
 class PrescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Prescription
         fields = '__all__'
-        depth = 1
+        depth = 2
+    # def create(self, validated_data):
+    #     # get a patient instance
+    #     patient = Patient.objects.get(id=validated_data['pid'])
+    #     # get a student instance
+    #     student = Student.objects.get(id=validated_data['sid'])
+    #     # create a prescription instance
+    #     prescription = Prescription.objects.create(patient=patient, student=student)
+    #     prescription.save()
+    #     return prescription

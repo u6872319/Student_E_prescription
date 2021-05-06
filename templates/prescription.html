@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+        <!-- import CSS -->
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+        <link rel="stylesheet" type="text/css" href="/static/css/prescription.css"> 
+    </head>
+    <body>
+        <p>Edit precription</p>
+        <span class="center">Patient information</span>
+        <div id="app">
+            <el-form :model="form" label-width="230px">
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="FirstName: ">
+                            <span>{[patient.firstname]}</span>
+                          </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="LastName: ">
+                            <span>{[patient.lastname]}</span>
+                          </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Pid: ">
+                            <span>{[patient.id]}</span>
+                          </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="Date of Birth: ">
+                            <span>{[patient.dob]}</span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Weight: ">
+                            <span>{[patient.weight]}</span>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="Allergy: ">
+                            <span>{[patient.allergen1]}</span>
+                          </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8" style="margin-left:5%">
+                        <el-form-item label="Description of Allergy: ">
+                            <span>{[patient.allergy1]}</span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <el-divider></el-divider>
+            <el-row>
+                <el-col :span="12">
+                    <div>
+                        <span>Medicine Name</span></br>
+                        <el-input
+                            placeholder="Please input"
+                            v-model="medName"
+                            clearable>
+                        </el-input>
+                    </div>
+                </el-col>
+                <el-col :span="12">
+                    <div>
+                        <span>Dose</span></br>
+                        <el-input
+                            placeholder="Please input"
+                            v-model="dose"
+                            clearable>
+                        </el-input>
+                    </div>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="6">
+                    <div>
+                        <span>Form</span></br>
+                        <el-select v-model="form" placeholder="Please choose">
+                            <el-option
+                              v-for="item in forms"
+                              :key="item.id"
+                              :label="item.form"
+                              :value="item.form">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </el-col>
+                <el-col :span="6">
+                    <div>
+                        <span>Frequency</span></br>
+                        <el-select v-model="frequency" placeholder="Please choose">
+                            <el-option
+                              v-for="item in frequencys"
+                              :key="item.id"
+                              :label="item.frequency"
+                              :value="item.frequency">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </el-col>
+                <el-col :span="6">
+                    <div>
+                        <span>Route</span></br>
+                        <el-select v-model="route" placeholder="Please choose">
+                            <el-option
+                              v-for="item in routes"
+                              :key="item.id"
+                              :label="item.route"
+                              :value="item.route">
+                            </el-option>
+                        </el-select>
+                    </div>
+                </el-col>
+                <el-col :span="6">
+                    <div style="text-align: center;"><el-button type="primary" @click="add">Add</el-button></div>
+                </el-col>
+            </el-row>
+            <el-divider></el-divider>
+            <div style="margin: 50px; margin-right: 250px;">
+                <el-table
+                :data="tableData"
+                border>
+                    <el-table-column
+                    prop="medEdited"
+                    label="Medicine Name"
+                    width="300">
+                    </el-table-column>
+                    <el-table-column
+                    prop="doseDes"
+                    label="dose"
+                    width="300">
+                    </el-table-column>
+                    <el-table-column
+                    prop="formDes"
+                    label="Form"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column
+                    prop="freDes"
+                    label="Frequency"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column
+                    prop="routeDes"
+                    label="Route"
+                    width="200">
+                    </el-table-column>
+                    <el-table-column label="operation">
+                        <template slot-scope="scope">
+                        <el-button
+                            size="mini"
+                            type="danger"
+                            @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </div>
+            <el-form ref="form" 
+                :model="form" 
+                label-width="110px" 
+                size="medium"
+                style="margin-left: 400px;">
+                <el-form-item label="Password: ">
+                    <el-input v-model="form.email" style="margin-right: 50px;"></el-input>
+                    <el-button type="primary">Confirm</el-button>
+                </el-form-item>   
+          </el-form>
+        </div>
+    </body>
+</html>
+<!-- import Vue before Element -->
+<script src="/static/js/vue.js"></script>
+<!-- import JavaScript -->
+<script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+new Vue({
+    el: '#app',
+    delimiters:['{[', ']}'],
+    data: function() {
+        return { 
+            medName:'',
+            dose:'',
+            param:0,
+            uid:'',
+            pre:{},
+            patient:[],
+            form: '',
+            frequency: '',
+            route: '',
+            forms:{},
+            frequencys:{},
+            routes:{},
+            tableData: {},
+        }
+    },
+
+    created() { 
+        this.activated();
+        this.activated1();
+    },
+    mounted() {
+        this.getPtient();
+        this.getForm();
+        this.getRoute();
+        this.getFre();
+        this.postPrescription()
+   
+    },
+    methods: {
+        handleDelete(index, row) {
+            this.deleteMedcineLog(row.id);
+            this.getpre();
+        },
+
+        getForm(){
+            var that = this;
+                axios.get(`http://127.0.0.1:8000/formlist`)
+                .then(function (res) {
+                    that.forms = res.data
+                })
+                .catch(function (error) {
+                console.log(error);
+                });
+        },
+        getRoute(){
+            var that = this;
+                axios.get(`http://127.0.0.1:8000/routelist`)
+                .then(function (res) {
+                    that.routes = res.data
+                })
+                .catch(function (error) {
+                console.log(error);
+                });
+        },
+        getFre(){
+            var that = this;
+                axios.get(`http://127.0.0.1:8000/frequencylist`)
+                .then(function (res) {
+                    that.frequencys = res.data
+                })
+                .catch(function (error) {
+                console.log(error);
+                });
+        },
+
+        getPtient() {
+            var that = this;
+            axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
+            params: {
+                id: this.param
+                }
+        })
+            .then(function (res) {
+                that.patient = res.data
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+        },
+
+        activated() {
+            var param1 = localStorage.getItem("searchParam");
+            this.param = Number(param1);
+            
+        },
+
+        activated1() {
+            var param2 = localStorage.getItem("searchUid");
+            this.uid = Number(1);
+        },
+
+        postPrescription() {
+            var that = this;
+             axios({
+                method:'PUT',
+                url:`http://127.0.0.1:8000/prescriptionlist/`,
+
+                data:{
+                    pid: this.param,
+                    sid: this.uid,
+                }
+            })
+            .then(function (res) {
+            that.preid = res.data.id
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+        },
+
+        addMedcineLog() {
+            var that = this;
+             axios({
+                method:'PUT',
+                url:`http://127.0.0.1:8000/medicineloglist/`,
+                data:{
+                    preid: this.preid,
+                    medEdited: this.medName,
+                    form:this.form,
+                    frequency:this.frequency,
+                    route:this.route,
+                    dose:this.dose,
+                }
+            })
+            .then(function (res) {
+            that.tableData = res.data
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+        },
+
+        getpre() {
+            var that = this;
+             axios({
+                method:'post',
+                url:`http://127.0.0.1:8000/prebasedmedicinelog/`,
+                data:{
+                    preid:this.preid,
+                }})
+            .then(function (res) {
+            that.tableData = res.data
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+        },
+
+        deleteMedcineLog(id) {
+                axios.delete(`http://127.0.0.1:8000/medicineloglist/${id}`)
+                .then(function (res) {
+                })
+                .catch(function (error) {
+                console.log(error);
+                });
+        },
+
+        add() {
+            this.addMedcineLog();
+            this.route='';
+            this.frequency= '';
+            this.form='';
+            this.dose='';
+            this.medName='';
+        }
+
+       
+    }
+})
+</script>

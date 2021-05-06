@@ -7,6 +7,8 @@ from rest_framework.response import Response
 from .models import MedicineStatic, Patient, Form, Frequency, Route, Student, Prescription, MedicineLog
 from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializer,FrequencySerializer,RouteSerializer,StudentSerializer, MedicineLogSerializer,PrescriptionSerializer
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 
@@ -56,6 +58,7 @@ def patient_unique(request, pk):
         if request.data['weight'] == "":
             serializer = PatientSerializer(patient)
             return Response(serializer.data)
+
         serializer = PatientSerializer(patient,data = request.data)
         if serializer.is_valid():
             serializer.save()
@@ -157,7 +160,7 @@ def prescription_unique(request,pk):
 #GET:获得所有学生填写的medicine条目（应该没啥用）
 #PUT：给我‘preid’(药方id)，'medEdited'(学生填写的一个药品名)，‘form’(学生填写的药品名对应的form)， ‘frequency’（学生填写的药品名
 # 对应的frequency）， ‘route’（学生填写的药品名对应的route）， ‘dose’（学生填写的药品名对应的dose），给你返回跟这个药方id绑定的所有
-# medicine的字段(每条药品写完按下add键触发)
+# medicine的字段(每条药品写完按下add键触发，或学生)
 #url: http://127.0.0.1:8000/medicineloglist/
 @api_view(['GET', 'PUT'])
 def medicineloglist(request):
@@ -197,7 +200,6 @@ def medicineLog_forOnePres(request,pk):
         medicinelog.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 @api_view(['POST'])
 def prebased_medlogs(request):
     if request.method == 'POST':
@@ -205,9 +207,6 @@ def prebased_medlogs(request):
         medicinelogs = MedicineLog.objects.all().filter(prescription = prescription)
         serilalizer = MedicineLogSerializer(medicinelogs, many=True)
         return Response(serilalizer.data)
-
-
-
 
 @api_view(['GET'])
 def formlist(request):
@@ -231,3 +230,20 @@ def routelist(request):
         routes = Route.objects.all()
         serializer = RouteSerializer(routes, many=True)
         return Response(serializer.data)
+
+
+
+def login(request):
+    return render(request, 'login.html')
+
+
+def patientConfirm(request):
+    return render(request, 'patientConfirm.html')
+
+
+def patientSelect(request):
+    return render(request, 'patientSelect.html')
+
+
+def prescription(request):
+    return render(request, 'prescription.html')

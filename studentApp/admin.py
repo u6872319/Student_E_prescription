@@ -12,7 +12,7 @@ class MedicineStaticAdmin(ImportExportModelAdmin):
 
 @admin.register(Patient)
 class PatientAdmin(ImportExportModelAdmin):
-    list_display = ('lastname', 'firstname', 'dob', 'weight', 'allergen1', 'allergy1')
+    list_display = ('id','lastname', 'firstname', 'dob', 'weight', 'allergen1', 'allergy1')
     pass
 
 

@@ -11,7 +11,7 @@
     <div id="app"> 
       <el-row>
         <el-col :span="12">
-          <div style="margin-top:60px;"> 
+          <div style="margin-top:60px;margin-left:100px"> 
             <el-autocomplete
               v-model="input"
               :fetch-suggestions="querySearch" 
@@ -29,21 +29,21 @@
           </div>
         </el-col>
         <el-col :span="12">
-          <el-form ref="form" :model="form" label-width="180px">
+          <el-form ref="form" label-width="180px">
             <el-form-item label="FirstName: ">
-                <span>{{patient.firstname}}</span>
+                <span>{[patient.firstname]}</span>
               </el-form-item>
               <el-form-item label="LastName: ">
-                <span>{{patient.lastname}}</span>
+                <span>{[patient.lastname]}</span>
               </el-form-item>
               <el-form-item label="Pid: ">
-                <span>{{patient.id}}</span>
+                <span>{[patient.id]}</span>
               </el-form-item>
               <el-form-item label="Date of Birth: ">
-                <span>{{patient.id}}</span>
+                <span>{[patient.dob]}</span>
               </el-form-item>
               <el-form-item label="Weight: ">
-                <span>{{patient.weight}}</span>
+                <span>{[patient.weight]}</span>
             </el-form-item>
           </el-form>
         </el-col>
@@ -57,9 +57,10 @@
   <script src="https://unpkg.com/element-ui/lib/index.js"></script>
   <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
   <script>
-    new Vue({
+    var app = new Vue({
       el: '#app',
-      data: function() {
+      delimiters:['{[', ']}'],
+      data: function(){
         return {
             options: [{
                 value: 'choose1',
@@ -74,57 +75,52 @@
             value: '',
             input: '',
             form: {},
-            patients: [],
-            firstName: [],
-            lastName: [],
-            Pid: [],
+            patients: {},
+            patientsid: {},
+            patientsfn: {},
+            patientsln: {},
             alreadyChoose: {},
-            all:[],
-            uid:'',
+            all:{},
+            uid:0,
             patient: {},
-            param: {},
+            param:0,
 
         }
       },
       mounted() {
          this.getAllPtient();
-
       },
       watch: {
-
+        input() {
+          this.getOnePtient();
+          this.getAllPtient();
+          console.log(this.patient)
+        }
       },
+     
       methods: {
         handleSelect(item) {
-          for(var item in this.all){
-            if(item.firstName===item){
-              this.alreadyChoose = item
-
-            }else if(item.lastname===item){
-              this.alreadyChoose = item
-
-            }else if (item.lastname===item){
-              this.alreadyChoose = item
-            };
-          };
           this.getOnePtient();
         },
         getAllPtient() {
-          axios.get('http://127.0.0.1:8000/patientlist/')
+          var that = this;
+          axios.get('/patientlist/')
             .then(function (res) {
-                this.patients = res.data
+                that.patients = res.data
             })
             .catch(function (error) {
               console.log(error);
             });
         },
         getOnePtient() {
-          axios.get(`http://127.0.0.1:8000/patientlist/${this.input}`, {
+          var that = this;
+          axios.get(`/patientlist/${this.input}`, {
              params: {
                id: this.input
                 }
           })
             .then(function (res) {
-                this.patient = res.data
+                that.patient = res.data
             })
             .catch(function (error) {
               console.log(error);
@@ -132,42 +128,57 @@
         },
 
         querySearch(queryString, cb) {
-          var patients = this.patients;
-          var restaurants = this.restaurants;
+          if(this.value==="choose1"){
+            var patients = this.patientsid;
+          }else if(this.value==="choose3"){
+            var patients = this.patientsfn;
+          }else if(this.value==="choose2"){
+            var patients = this.patientsln;
+          }
+          
+          
           var results = queryString ? patients.filter(this.createFilter(queryString)) : patients;
-          cb(results);
+          cb(results);  
         },
         createFilter(queryString) {
           return (patient) => {
               return (patient.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
             }
         },
-        onSubmit(){
 
+       
+        onSubmit(){ 
+          this.search()
         },
         select(){
           this.all = this.patients
           if(this.value==="choose1"){
-            this.patients = this.all.map(item => ({value:item.id}));
-          }else if (this.value==="choose2"){
-            this.patients = this.all.map(item => ({value:item.firstName}));
+            this.patientsid = this.all.map(item => ({value:item.id}));
+            console.log(this.uid)
 
           }else if (this.value==="choose3"){
-            this.patients = this.all.map(item => ({value:item.lastName}));
+            this.patientsfn = this.all.map(item => ({value:item.firstname}));
+
+          }else if (this.value==="choose2"){
+            this.patientsln = this.all.map(item => ({value:item.lastname}));
           };
 
 
         },
         search() {
-            localStorage.setItem("searchParam", JSON.stringify(this.param));
+          this.param=this.input;
+          localStorage.setItem("searchParam", JSON.stringify(this.param));
+        },
+
+        activated() {
+          var param = localStorage.getItem("searchUid");
+          this.uid = Number(param);
         },
 
         loadAll() {
-          return [
-            {'firstName':'Jarvis','lastName':'Huang','Pid':'1'},{'firstName':'Xiaoliang','lastName':'Jia','Pid':'2'},
-          ]
-      }
+          return this.patients
+        }
 
-    }
+      }
     })
   </script>

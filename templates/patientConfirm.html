@@ -14,35 +14,35 @@
                 <el-col :span="12">
                     <div class="grid-content bg-purple">
                     <el-form-item label="FirstName: ">
-                        <span>{{patient.firstname}}</span>
+                        <span>{[patient.firstname]}</span>
                         </el-form-item>
                     </div> 
                 </el-col>
                 <el-col :span="12">
                     <div>
                         <el-form-item label="LastName: ">
-                        <span>{{patient.lastname}}</span>
+                        <span>{[patient.lastname]}</span>
                         </el-form-item>
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <div>
                         <el-form-item label="Pid: ">
-                        <span>{{patient.id}}</span>
+                        <span>{[patient.id]}</span>
                         </el-form-item>
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <div>
                         <el-form-item label="Date of Birth: ">
-                        <span>{{patient.dob}}</span>
+                        <span>{[patient.dob]}</span>
                         </el-form-item>
                     </div>
                 </el-col>
                 <el-col :span="12">
                     <div>
                         <el-form-item label="Weight: ">
-                        <el-input v-model="form.weight" style="width: 120px;"><span>{{patient.weight}}</span></el-input>
+                        <el-input v-model="form.weight" style="width: 120px;" :placeholder="patient.weight"></el-input>
                         </el-form-item>
                     </div>
                 </el-col>
@@ -56,15 +56,15 @@
                         </el-radio-group>
                     </el-form-item>
                     <el-form-item label="Allergy: " v-if="form.allergy===1">
-                    <el-input v-model="form.allgyName" style="width: 120px;"></el-input>
+                    <el-input v-model="form.allgyName" style="width: 100px;"></el-input>
                     </el-form-item>
                     <el-form-item label="Description of Allergy: " v-if="form.allergy===1">
-                    <el-input v-model="form.allergyDescription" style="width: 120px;"></el-input>
+                    <el-input v-model="form.allergyDescription" type="textarea" :rows="2" style="width: 300px;"></el-input>
                     </el-form-item>
                 </div> 
             </el-row>
         </el-form>
-        <div style="text-align: center;"><el-button type="primary" @click="onSubmit">Confirm</el-button></div>
+         <a href="{% url 'prescription'%}"><div style="text-align: center;"><el-button type="primary" @click="onSubmit">Confirm</el-button></div></a>
     </div>
 </body>
 </html>
@@ -76,6 +76,7 @@
   <script>
     new Vue({
       el: '#app',
+      delimiters:['{[', ']}'],
       data: function() {
         return { 
             form: {
@@ -85,25 +86,30 @@
                 weight:'',
 
             },
-            param: {},
+            param: 0,
+            uid:0,
             patient: {},
          }
       },
-      created(){
-          this.getPtient()
+      created(){  
+          this.activated();
+      },
+      mounted(){
+           this.getPtient()
       },
       methods: {
             onSubmit(){
-                this.patientPost();
+                this.patientPost()
             },
             getPtient() {
+                var that = this;
                 axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
                 params: {
                     id: this.param
                     }
             })
                 .then(function (res) {
-                    this.patient = res.data
+                    that.patient = res.data
                 })
                 .catch(function (error) {
                 console.log(error);
@@ -111,14 +117,22 @@
             },
             activated() {
                 var param = localStorage.getItem("searchParam");
-                this.param = param;
+                this.param = Number(param);
             },
             patientPost() {
-                axios.put(`http://127.0.0.1:8000/patientlist/${this.param}`, {
-                id: this.param,
-                editedweight: this.form.weight,
-                allergen1: this.form.allgyName,
-                allergy1: this.allergyDescription,
+                axios({
+                method:'PATCH',
+                url:`http://127.0.0.1:8000/patientlist/${this.patient.id}`,
+
+                data:{
+                    weight: this.form.weight,
+                    id: this.patient.id,
+                    allergen1: this.form.allgyName,
+                    allergy1: this.form.allergyDescription,
+                    lastname: this.patient.lastname,
+                    firstname: this.patient.firstname,
+                    dob:this.patient.dob
+                }
             })
             .then(function (response) {
             console.log(response);
@@ -128,7 +142,7 @@
             });
             }
             
-    }
+        }
 
     })
   </script>

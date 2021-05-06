@@ -1,7 +1,9 @@
-.el-select .el-input {
+.el-select  {
     width: 130px;
   }
-
+.el-input {
+    width: 300px;
+  }
   p {
     margin:50px;
     font-size: 2em; 

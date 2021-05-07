@@ -11,19 +11,19 @@
     <div id="app"> 
       <el-row>
         <el-col :span="12">
-          <div style="margin-top:60px;margin-left:100px"> 
+          <div style="margin-top:60px;margin-left:150px"> 
+            <el-select v-model="value" slot="prepend" placeholder="Select" @change="select">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
             <el-autocomplete
               v-model="input"
               :fetch-suggestions="querySearch" 
-              @select="handleSelect">
-              <el-select v-model="value" slot="prepend" placeholder="Select" @change="select">
-                <el-option
-                  v-for="item in options"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value">
-                </el-option>
-              </el-select>
+              @select="handleSelect">  
             </el-autocomplete>
             <a href="{% url 'patientConfirm'%}"><el-button slot="append" icon="el-icon-search" @click="onSubmit"></el-button></a>
           </div>
@@ -116,7 +116,7 @@
           var that = this;
           axios.get(`/patientlist/${this.input}`, {
              params: {
-               id: this.input
+               id:this.input
                 }
           })
             .then(function (res) {
@@ -135,8 +135,6 @@
           }else if(this.value==="choose2"){
             var patients = this.patientsln;
           }
-          
-          
           var results = queryString ? patients.filter(this.createFilter(queryString)) : patients;
           cb(results);  
         },

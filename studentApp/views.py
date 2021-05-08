@@ -127,7 +127,7 @@ def student_unique(request, uid):
 
 #GET:获得所有现存的prescription instances  PUT:给我'pid'(patient id)和‘sid’(student id), 返回一个新建的药方的所有字段
 #url: http://127.0.0.1:8000/prescriptionlist/
-@api_view(['GET','PUT'])
+@api_view(['GET','PUT', 'PATCH'])
 def prescriptionlist(request):
     if request.method == 'GET':
         prescriptions = Prescription.objects.all()
@@ -145,6 +145,15 @@ def prescriptionlist(request):
         if serializer.is_valid():
             serializer.save()
         return Response(serializer.data)
+
+    if request.method == 'PATCH':
+        prescription = Prescription.objects.get(pk = request.data['preid'])
+        prescription.review = request.data['review']
+        serializer = PrescriptionSerializer(prescription, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
 #GET:根据药方id获得一个指定的药方instance
 #url:http://127.0.0.1:8000/prescriptionlist/药方id/
@@ -208,6 +217,17 @@ def prebased_medlogs(request):
         serilalizer = MedicineLogSerializer(medicinelogs, many=True)
         return Response(serilalizer.data)
 
+@api_view(['POST'])
+def studentbasedpres(request):
+    if request.method == 'POST':
+        student = Student.objects.get(uid = request.data['uid'])
+        prescriptions = Prescription.objects.all().filter(student = student).latest()
+        serilalizer = PrescriptionSerializer(prescriptions)
+        return Response(serilalizer.data)
+
+
+
+
 @api_view(['GET'])
 def formlist(request):
     if request.method == 'GET':
@@ -229,6 +249,14 @@ def routelist(request):
     if request.method == 'GET':
         routes = Route.objects.all()
         serializer = RouteSerializer(routes, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def medicinestaticlist(request):
+    if request.method == 'GET':
+        medstatic = MedicineStatic.objects.all()
+        serializer = MedicineStaticSerializer(medstatic, many=True)
         return Response(serializer.data)
 
 

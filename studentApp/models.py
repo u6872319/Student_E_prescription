@@ -41,6 +41,9 @@ class Prescription(models.Model):
     student = models.ForeignKey(to=Student, on_delete=models.PROTECT, blank=True)
     review = models.TextField(blank=True)
 
+    class Meta:
+        get_latest_by = 'id'
+
 
 class MedicineStatic(models.Model):
     medName = models.CharField(max_length=1000)

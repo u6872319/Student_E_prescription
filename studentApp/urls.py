@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^patientlist/(?P<lastname>[a-zA-Z]+)$', views.patientlast),
     url(r'^patientlist/(?P<firstname>[a-zA-Z]+)$', views.patientfirst),
     url(r'^patientlist/(?P<lastname>[a-zA-Z]+)/(?P<firstname>[a-zA-Z]+)$', views.patientlastfirst),
+    url(r'^medicinestaticlist/$', views.medicinestaticlist),
     url(r'^prebasedmedicinelog/$', views.prebased_medlogs),
+    url(r'^studentbasedpre/$', views.studentbasedpres),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

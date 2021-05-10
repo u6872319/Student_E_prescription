@@ -14,73 +14,73 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="FirstName: ">
-                            <span>{{'Stephen'}}</span>
+                            <span>{[patient.firstname]}</span>
                           </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="LastName: ">
-                            <span>{{'Jame'}}</span>
+                            <span>{[patient.lastname]}</span>
                           </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="Pid: ">
-                            <span>{{'p5645768'}}</span>
+                            <span>{[patient.id]}</span>
                           </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="Date of Birth: ">
-                            <span>{{'12/01/1984'}}</span>
+                            <span>{[patient.dob]}</span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="Weight: ">
-                            <span>{{'78kg'}}</span>
+                            <span>{[patient.weight]}</span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="Allergy: ">
-                            <span>{{'allergic asthma'}}</span>
+                            <span>{[patient.allergen1]}</span>
                           </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8" style="margin-left:5%">
                         <el-form-item label="Description of Allergy: ">
-                            <span>{{'This allergy is ...'}}</span>
+                            <span>{[patient.allergy1]}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>
             </el-form>
             <el-divider></el-divider>
-            <p>Student ID: {{"u12234567"}}<p>
+            <p>Student ID: {[student.id]}<p>
             <div style="margin: 50px; margin-right: 250px;">
                 <el-table
                 :data="tableData"
                 height>
                     <el-table-column
-                    prop="medicineName"
+                    prop="medEdited"
                     label="Medicine Name"
                     width="300">
                     </el-table-column>
                     <el-table-column
-                    prop="dose"
+                    prop="doseDes"
                     label="dose"
                     width="300">
                     </el-table-column>
                     <el-table-column
-                    prop="form"
+                    prop="formDes"
                     label="Form"
                     width="200">
                     </el-table-column>
                     <el-table-column
-                    prop="frequency"
+                    prop="freDes"
                     label="Frequency"
                     width="200">
                     </el-table-column>
                     <el-table-column
-                    prop="route"
+                    prop="routeDes"
                     label="Route"
                     width="200">
                     </el-table-column>
@@ -117,6 +117,7 @@
 <script>
 new Vue({
     el: '#app',
+    delimiters:['{[', ']}'],
     data: function() {
         return { 
             tableData: [{
@@ -135,13 +136,49 @@ new Vue({
             form: {
                 mark:'',
                 comment:'',
-            }
+            },
+            patient:'',
         }
+    },
+    created() { 
+        this.getPreid();
+    },
+    mounted() {
+        this.getMessage();  
     },
     method: {
         onSubmit() {
         console.log('submit!');
-      }
+      },
+      getPreid() {
+            var that = this;
+            axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
+            params: {
+                id: this.param
+                }
+        })
+            .then(function (res) {
+                that.id = res.data.id
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+        },
+        getMessage() {
+            var that = this;
+            axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
+            params: {
+                id: this.param
+                }
+        })
+            .then(function (res) {
+                that.tableData = res.data;
+                that.patient =res.data;
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+        },
     }
 })
 </script>

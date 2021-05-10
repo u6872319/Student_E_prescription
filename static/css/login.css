@@ -29,3 +29,9 @@ margin-bottom: 50px;
 .el-link--inner {
     font-size: 20px;
 }
+
+.el-checkbox__label {
+    font-size: 20px !important;
+}
+
+

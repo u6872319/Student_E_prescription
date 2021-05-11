@@ -102,7 +102,7 @@ def patientlastfirst(request, lastname, firstname):
         serializer = PatientSerializer(patients,many=True)
         return Response(serializer.data)
 
-
+# user的变量
 @api_view(['GET'])
 def studentlist(request):
     """
@@ -298,3 +298,9 @@ def patientSelect(request):
 
 def prescription(request):
     return render(request, 'prescription.html')
+
+def detail(request):
+    return render(request, 'detail.html')
+
+def Assessor(request):
+    return render(request, 'Assessor.html')

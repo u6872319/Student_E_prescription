@@ -22,11 +22,17 @@
           <el-form-item>
             <p style="font-size: 20px;">If you have any problem, please contact info@drmed.com.au</p>
           </el-form-item>
-          <el-form-item style="margin-left:100px">
+          <el-checkbox v-model="checked" size="medium" style="margin-left: 260px; margin-bottom: 60px; ">Assessor</el-checkbox>
+          <el-form-item style="margin-left:100px" v-if="checked===false">
             <a href="{% url 'patientSelect'%}"><el-button type="primary" @click="onSubmit">Log in</el-button></a>
+        </el-form-item>
+        <el-form-item style="margin-left:100px" v-else-if="checked===true">
+            <a href="{% url 'Assessor'%}"><el-button type="primary" @click="onSubmit">Log in</el-button></a>
         </el-form-item>
       </el-form>
     </div>
+  
+    
   </body>
 </html>
 <!-- import Vue before Element -->
@@ -43,7 +49,8 @@
           uid:'',
           password:'',
         },
-        studentid:0          
+        studentid:0,
+        checked:false,          
       }
     },
 

@@ -40,21 +40,7 @@
     el: '#app',
     data: function() {
         return { 
-            tableData: [{
-                uid: 'u12234567',
-            }, {
-                uid: 'u23456782',
-            },{
-                uid: 'u34567891',
-            },{
-                uid: 'u45678912',
-            },{
-                uid: 'u56748392',
-            },{
-                uid: 'u58697054',
-            },{
-                uid: 'u56473821',
-            }],
+            tableData: [],
             uid:'',
         }
     },
@@ -63,12 +49,14 @@
     },
     methods: {
         handleClick(row) {
-            row.id=this.uid;
-            window.location.href = `http://127.0.0.1:8000/patientlist/${this.uid}`;
+            this.uid=row.uid;
+            console.log(row),
+            window.location.href = `http://127.0.0.1:8000/detail`;
+            this.search();
         },
         getAllStudents() {
           var that = this;
-          axios.get('/patientlist/')
+          axios.get('/studentlist/')
             .then(function (res) {
                 that.tableData = res.data
             })
@@ -76,6 +64,10 @@
               console.log(error);
             });
         },
+        search() {
+          var param = this.uid;
+          localStorage.setItem("searchuid", param);
+      },
 }
   })
 </script>

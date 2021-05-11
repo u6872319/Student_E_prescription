@@ -9,7 +9,7 @@ from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializ
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-from drf_multiple_model.views import FlatMultipleModelAPIView
+#from drf_multiple_model.views import FlatMultipleModelAPIView
 from rest_framework.permissions import AllowAny
 
 

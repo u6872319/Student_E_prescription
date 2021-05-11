@@ -33,7 +33,8 @@ class Route(models.Model):
 
 class Student(models.Model):
     uid = models.CharField(max_length=1000)
-    password = models.CharField(max_length=1000,blank=True)
+    password = models.CharField(max_length=1000, blank=True)
+
 
 
 class Prescription(models.Model):

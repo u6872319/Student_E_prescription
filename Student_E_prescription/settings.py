@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     'import_export',
     'rest_framework',
     'studentApp',
-    'drf_multiple_model',
 ]
 
 MIDDLEWARE = [

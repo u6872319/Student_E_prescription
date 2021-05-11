@@ -19,16 +19,18 @@
           <el-form-item label="Password: ">
               <el-input v-model="form.password"></el-input>
           </el-form-item>
+          <p style="font-size: 20px; margin-left: 100px; color: red" v-if="wrong===true">wrong password</p>
           <el-form-item>
             <p style="font-size: 20px;">If you have any problem, please contact info@drmed.com.au</p>
           </el-form-item>
           <el-checkbox v-model="checked" size="medium" style="margin-left: 260px; margin-bottom: 60px; ">Assessor</el-checkbox>
           <el-form-item style="margin-left:100px" v-if="checked===false">
-            <a href="{% url 'patientSelect'%}"><el-button type="primary" @click="onSubmit">Log in</el-button></a>
+            <el-button type="primary" @click="onSubmit">Log in</el-button>
         </el-form-item>
         <el-form-item style="margin-left:100px" v-else-if="checked===true">
             <a href="{% url 'Assessor'%}"><el-button type="primary" @click="onSubmit">Log in</el-button></a>
         </el-form-item>
+        
       </el-form>
     </div>
   
@@ -50,7 +52,9 @@
           password:'',
         },
         studentid:0,
-        checked:false,          
+        checked:false, 
+        wrong:false, 
+        comfirmPassword:'',        
       }
     },
 
@@ -59,6 +63,15 @@
     methods: {
       onSubmit() {
         this.studentPost();
+        this.jump();
+      },
+
+      jump() {
+        if(this.form.password===this.comfirmPassword){
+          window.location.href = `http://127.0.0.1:8000/patientSelect`;
+        }else {
+          this.wrong = true;
+        }
       },
 
       search() {
@@ -70,14 +83,12 @@
         axios.get(`http://127.0.0.1:8000/studentlist/${this.form.uid}`)
           .then(function (res) {
            localStorage.setItem("searchUid", JSON.stringify(res.data.id));
+           that.comfirmPassword = res.data.password;
           })
           .catch(function (error) {
           console.log(error);
           });
       },
-
-
-
 
     }
   })

@@ -54,11 +54,13 @@
                 </el-row>
             </el-form>
             <el-divider></el-divider>
-            <p>Student ID: {[student.id]}<p>
+            <p>Student ID: {[uid]}<p>
             <div style="margin: 50px; margin-right: 250px;">
                 <el-table
-                :data="tableData"
-                height>
+                :data="tableData">
+                <template slot="empty">
+                    <span style="color: #969799;">No data</span>
+                </template>
                     <el-table-column
                     prop="medEdited"
                     label="Medicine Name"
@@ -92,11 +94,11 @@
                 <el-form ref="form" :model="form" label-width="120px">
                     <el-form-item label="Mark: ">
                         <el-select v-model="form.mark" placeholder="Please select a mark">
-                        <el-option label="HD" value="hd"></el-option>
-                        <el-option label="D" value="d"></el-option>
-                        <el-option label="C" value="c"></el-option>
-                        <el-option label="P" value="p"></el-option>
-                        <el-option label="F" value="f"></el-option>
+                        <el-option label="HD" value="HD"></el-option>
+                        <el-option label="D" value="D"></el-option>
+                        <el-option label="C" value="C"></el-option>
+                        <el-option label="P" value="P"></el-option>
+                        <el-option label="F" value="F"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="Comments: ">
@@ -114,6 +116,7 @@
 <script src="/static/js/vue.js"></script>
 <!-- import JavaScript -->
 <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 <script>
 new Vue({
     el: '#app',
@@ -138,47 +141,62 @@ new Vue({
                 comment:'',
             },
             patient:'',
+            uid:'',
+            preid:'',
         }
     },
     created() { 
-        this.getPreid();
+        this.activated();
+        
     },
     mounted() {
-        this.getMessage();  
+         this.getMessage();
     },
-    method: {
+    methods: {
         onSubmit() {
-        console.log('submit!');
-      },
-      getPreid() {
-            var that = this;
-            axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
-            params: {
-                id: this.param
-                }
-        })
-            .then(function (res) {
-                that.id = res.data.id
-            })
-            .catch(function (error) {
-            console.log(error);
-            });
+            this.comment();
         },
+  
         getMessage() {
-            var that = this;
-            axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
-            params: {
-                id: this.param
-                }
-        })
+           var that = this;
+             axios({
+                method:'post',
+                url:`http://127.0.0.1:8000/studentbasedpres/`,
+                data:{
+                    uid:this.uid,
+                }})
             .then(function (res) {
-                that.tableData = res.data;
-                that.patient =res.data;
+            that.tableData = res.data.medicinelogs;
+            that.patient = res.data.prescription.patient;
+            that.preid = res.data.prescription.id;
             })
             .catch(function (error) {
             console.log(error);
             });
         },
+
+        comment() {
+            axios({
+                method:'PATCH',
+                url:`http://127.0.0.1:8000/prescriptionlist/`,
+
+                data:{
+                    preid: this.preid,
+                    review: "Mark: " + this.form.mark + ", comment: "+this.form.comment,
+                }
+            })
+            .then(function (response) {
+            console.log(response);
+            })
+            .catch(function (error) {
+            console.log(error);
+            });
+        },
+
+        activated() {
+          var param = localStorage.getItem("searchuid");
+          this.uid = param;
+        }
     }
 })
 </script>

@@ -4,6 +4,7 @@ from django.urls import path
 
 from rest_framework.urlpatterns import format_suffix_patterns
 
+
 urlpatterns = [
     url(r'^patientlist/$', views.patientlist),
     url(r'^patientlist/(?P<pk>[0-9]+)$', views.patient_unique),
@@ -21,6 +22,7 @@ urlpatterns = [
     url(r'^patientlist/(?P<lastname>[a-zA-Z]+)/(?P<firstname>[a-zA-Z]+)$', views.patientlastfirst),
     url(r'^medicinestaticlist/$', views.medicinestaticlist),
     url(r'^prebasedmedicinelog/$', views.prebased_medlogs),
-    url(r'^studentbasedpre/$', views.studentbasedpres),
+    url(r'^studentbasedpres/$', views.studentbasedpres),
+    # url(r'^getpresandcorresmedlog/$', views.TextAPIView.as_view()),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

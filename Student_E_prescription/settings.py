@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'import_export',
     'rest_framework',
-    'studentApp'
+    'studentApp',
+    'drf_multiple_model',
 ]
 
 MIDDLEWARE = [

@@ -9,7 +9,8 @@ from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializ
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
-
+from drf_multiple_model.views import FlatMultipleModelAPIView
+from rest_framework.permissions import AllowAny
 
 
 # Create your views here.
@@ -147,14 +148,32 @@ def prescriptionlist(request):
         return Response(serializer.data)
 
     if request.method == 'PATCH':
-        prescription = Prescription.objects.get(pk = request.data['preid'])
+        prescription = Prescription.objects.get(pk=request.data['preid'])
         prescription.review = request.data['review']
         serializer = PrescriptionSerializer(prescription, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-        
+
+
+# class TextAPIView(FlatMultipleModelAPIView):
+#
+#     def post(self, request, *args, **kwargs):
+#         querylist = self.get_querylist()
+#         return Response(querylist)
+#
+#     def get_querylist(self):
+#         prescription = Prescription.objects.get(pk=self.request.data['preid'])
+#         prescription.review = self.request.data['review']
+#         medicinelogs = MedicineLog.objects.filter(prescription=prescription)
+#         querylist = [
+#             {'queryset': prescription, 'serializer_class': PrescriptionSerializer},
+#             {'queryset': medicinelogs, 'serializer_class': MedicineLogSerializer},
+#         ]
+#         return querylist
+
+
 #GET:根据药方id获得一个指定的药方instance
 #url:http://127.0.0.1:8000/prescriptionlist/药方id/
 @api_view(['GET'])
@@ -223,9 +242,12 @@ def studentbasedpres(request):
         student = Student.objects.get(uid = request.data['uid'])
         prescriptions = Prescription.objects.all().filter(student = student).latest()
         serilalizer = PrescriptionSerializer(prescriptions)
-        return Response(serilalizer.data)
-
-
+        medicinelogs = MedicineLog.objects.all().filter(prescription = prescriptions)
+        serilalizer_med = MedicineLogSerializer(medicinelogs, many=True)
+        return Response({
+            'prescription':serilalizer.data,
+            'medicinelogs':serilalizer_med.data
+        })
 
 
 @api_view(['GET'])
@@ -258,6 +280,7 @@ def medicinestaticlist(request):
         medstatic = MedicineStatic.objects.all()
         serializer = MedicineStaticSerializer(medstatic, many=True)
         return Response(serializer.data)
+
 
 
 

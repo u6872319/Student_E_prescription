@@ -40,7 +40,13 @@ class StudentAdmin(ImportExportModelAdmin):
     pass
 
 
-admin.site.register(Prescription)
+@admin.register(Prescription)
+class StudentAdmin(ImportExportModelAdmin):
+    list_display = ('id','patient','student','review')
+    pass
+
+
+# admin.site.register(Prescription)
 # admin.site.register(MedicineLog)
 admin.site.register(MedicineLog)
 

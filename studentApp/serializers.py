@@ -1,5 +1,7 @@
 from rest_framework import serializers
 from .models import Patient, Form, Frequency, Route, Student, MedicineLog, MedicineStatic, Prescription
+from django.contrib.auth.models import User
+
 
 class MedicineStaticSerializer(serializers.ModelSerializer):
     class Meta:
@@ -51,3 +53,9 @@ class PrescriptionSerializer(serializers.ModelSerializer):
     #     prescription = Prescription.objects.create(patient=patient, student=student)
     #     prescription.save()
     #     return prescription
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'

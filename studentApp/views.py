@@ -4,8 +4,9 @@ from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from django.contrib.auth.models import User
 from .models import MedicineStatic, Patient, Form, Frequency, Route, Student, Prescription, MedicineLog
-from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializer,FrequencySerializer,RouteSerializer,StudentSerializer, MedicineLogSerializer,PrescriptionSerializer
+from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializer,FrequencySerializer,RouteSerializer,StudentSerializer, MedicineLogSerializer,PrescriptionSerializer,UserSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -281,6 +282,13 @@ def medicinestaticlist(request):
         serializer = MedicineStaticSerializer(medstatic, many=True)
         return Response(serializer.data)
 
+
+@api_view(['GET'])
+def userlist(request):
+    if request.method == 'GET':
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data)
 
 
 

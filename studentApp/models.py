@@ -44,7 +44,7 @@ class Prescription(models.Model):
     review = models.TextField(blank=True)
 
     # def __str__(self):
-    #     return Prescription.id
+    #      return self.student.uid
 
     class Meta:
         get_latest_by = 'id'

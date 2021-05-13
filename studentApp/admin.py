@@ -40,10 +40,30 @@ class StudentAdmin(ImportExportModelAdmin):
     pass
 
 
+# def prescription_by_uid(obj):
+#     return obj.student.uid
+
+
 @admin.register(Prescription)
-class StudentAdmin(ImportExportModelAdmin):
-    list_display = ('id','patient','student','review')
-    pass
+class PrescriptionAdmin(ImportExportModelAdmin):
+
+    def prescription_by_uid(obj):
+        return obj.student.uid
+
+    def patientid(obj):
+        return obj.patient.id
+
+    def patient_lastname(obj):
+        return obj.patient.lastname
+
+    def patient_firstname(obj):
+        return obj.patient.firstname
+
+    list_display = ('id', prescription_by_uid, patientid, patient_lastname, patient_firstname,'review')
+    prescription_by_uid.admin_order_field = 'student_id'
+    patientid.admin_order_field = 'patient_id'
+    patient_lastname.admin_order_field = 'patient'
+
 
 
 # admin.site.register(Prescription)

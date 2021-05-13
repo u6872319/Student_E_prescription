@@ -60,7 +60,8 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
 
+
 class MarkerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Marker
-        field = '__all__'
+        fields = '__all__'

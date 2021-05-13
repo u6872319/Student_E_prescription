@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Patient, Form, Frequency, Route, Student, MedicineLog, MedicineStatic, Prescription
+from .models import Patient, Form, Frequency, Route, Student, MedicineLog, MedicineStatic, Prescription,Marker
 from django.contrib.auth.models import User
 
 
@@ -59,3 +59,8 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
+
+class MarkerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Marker
+        field = '__all__'

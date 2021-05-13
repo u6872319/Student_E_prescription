@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.contrib.auth.models import User
-from .models import MedicineStatic, Patient, Form, Frequency, Route, Student, Prescription, MedicineLog
-from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializer,FrequencySerializer,RouteSerializer,StudentSerializer, MedicineLogSerializer,PrescriptionSerializer,UserSerializer
+from .models import MedicineStatic, Patient, Form, Frequency, Route, Student, Prescription, MedicineLog, Marker
+from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializer,FrequencySerializer,RouteSerializer,StudentSerializer, MedicineLogSerializer,PrescriptionSerializer,UserSerializer, MarkerSerializer
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -298,6 +298,24 @@ def user_unique(request,username):
         user = User.objects.get(username = username)
         serializer = UserSerializer(user)
         return Response(serializer.data)
+
+
+@api_view(['GET'])
+def markerlist(request):
+    if request.method == 'GET':
+        markers = Marker.objects.all()
+        serializer = MarkerSerializer(markers, many=True)
+        return Response(serializer.data)
+
+
+@api_view(['GET'])
+def marker_unique(request,markername):
+    if request.method == 'GET':
+        marker = Marker.objects.get(markername = markername)
+        serializer = MarkerSerializer(marker)
+        return Response(serializer.data)
+
+
 
 
 def login(request):

@@ -25,6 +25,8 @@ urlpatterns = [
     url(r'^studentbasedpres/$', views.studentbasedpres),
     url(r'^userlist/$', views.userlist),
     url(r'^userlist/(?P<username>[a-zA-Z]+)$', views.user_unique),
+    url(r'^markerlist/$', views.markerlist),
+    url(r'^markerlist/(?P<markername>[a-zA-Z]+)$', views.marker_unique),
     # url(r'^getpresandcorresmedlog/$', views.TextAPIView.as_view()),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

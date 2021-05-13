@@ -62,6 +62,12 @@ class MedicineLog(models.Model):
     routeDes = models.CharField(max_length=1000,blank=True)
     doseDes = models.CharField(max_length=1000,blank=True)
 
+class Marker(models.Model):
+    markername = models.CharField(max_length=1000)
+    password = models.CharField(max_length=1000,blank=True)
+    def __str__(self):
+        return self.markername
+
 # class PreToMedLog(models.Model):
 #     medStatic = models.ForeignKey(MedicineStatic, on_delete=models.CASCADE)
 #     prescription = models.ForeignKey(Prescription, on_delete=models.CASCADE)

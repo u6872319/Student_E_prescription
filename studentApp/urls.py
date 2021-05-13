@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^prebasedmedicinelog/$', views.prebased_medlogs),
     url(r'^studentbasedpres/$', views.studentbasedpres),
     url(r'^userlist/$', views.userlist),
+    url(r'^userlist/(?P<username>[a-zA-Z]+)$', views.user_unique),
     # url(r'^getpresandcorresmedlog/$', views.TextAPIView.as_view()),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

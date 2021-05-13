@@ -7,17 +7,17 @@
       <link rel="stylesheet" type="text/css" href="/static/css/login.css"> 
   </head>
   <body>
-    <p class="title">STUDENT E-PRESCRIPTION SYSTEM</p>
+    <p class="title">ASSESSOR LOGIN PAGE</p>
     <div id="app" class="center">
       <el-form ref="form" 
         :model="form" 
         label-width="100px" 
         size="medium">
-          <el-form-item label="uid: ">
+          <el-form-item label="id: " >
               <el-input v-model="form.uid" @change="changed"></el-input>
           </el-form-item>
           <el-form-item label="Password: ">
-              <el-input v-model="form.password" ></el-input>
+              <el-input v-model="form.password"></el-input>
           </el-form-item>
           <p style="font-size: 20px; margin-left: 100px; color: red" v-if="wrongTips===true">wrong password</p>
           <el-form-item>
@@ -55,7 +55,6 @@
     },
 
     watch:{
-
     },
     methods: {
       onSubmit() {
@@ -65,7 +64,7 @@
 
       change() {
         if(this.form.password===this.comfirmPassword&&!(this.form.password == "" || this.form.password == null || this.form.password == undefined)){
-          window.location.href="{% url 'patientSelect'%}"
+          window.location.href="{% url 'Assessor'%}"
         }else {
           this.wrongTips=true;
         }
@@ -75,15 +74,10 @@
         this.studentPost();
       },
 
-      search() {
-          var param = this.studentid;
-          localStorage.setItem("searchUid", JSON.stringify(param));
-      },
       studentPost() {
         var that = this;
         axios.get(`http://127.0.0.1:8000/studentlist/${this.form.uid}`)
           .then(function (res) {
-           localStorage.setItem("searchUid", JSON.stringify(res.data.id));
            that.comfirmPassword = res.data.password;
           })
           .catch(function (error) {

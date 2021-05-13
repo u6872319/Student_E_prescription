@@ -65,13 +65,7 @@
             options: [{
                 value: 'choose1',
                 label: 'Pid'
-                }, {
-                value: 'choose2',
-                label: 'Last name'
-                }, {
-                value: 'choose3',
-                label: 'First name'
-            }],
+                }],
             value: '',
             input: '',
             form: {},
@@ -114,9 +108,9 @@
         },
         getOnePtient() {
           var that = this;
-          axios.get(`/patientlist/${this.input}`, {
+          axios.get(`/patientlist/${Number(this.input)}`, {
              params: {
-               id:this.input
+               id:Number(this.input)
                 }
           })
             .then(function (res) {
@@ -151,7 +145,7 @@
         select(){
           this.all = this.patients
           if(this.value==="choose1"){
-            this.patientsid = this.all.map(item => ({value:item.id}));
+            this.patientsid = this.all.map(item => ({'value':String(item.id)}));
             console.log(this.uid)
 
           }else if (this.value==="choose3"){
@@ -164,7 +158,7 @@
 
         },
         search() {
-          this.param=this.input;
+          this.param=Number(this.input);
           localStorage.setItem("searchParam", JSON.stringify(this.param));
         },
 

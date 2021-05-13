@@ -58,11 +58,13 @@
                 <el-col :span="12">
                     <div>
                         <span>Medicine Name</span></br>
-                        <el-input
+                        <el-autocomplete
                             placeholder="Please input"
+                            :fetch-suggestions="querySearch"
+                            :trigger-on-focus="false"
                             v-model="medName"
                             clearable>
-                        </el-input>
+                        </el-autocomplete>
                     </div>
                 </el-col>
                 <el-col :span="12">
@@ -163,8 +165,7 @@
                     </el-table-column>
                 </el-table>
             </div>
-            <el-form ref="form" 
-                :model="form" 
+            <el-form 
                 label-width="110px" 
                 size="medium"
                 style="margin-left: 400px;">
@@ -198,14 +199,16 @@ new Vue({
             form: '',
             frequency: '',
             route: '',
-            forms:{},
-            frequencys:{},
-            routes:{},
-            tableData: {},
+            forms:[],
+            frequencys:[],
+            routes:[],
+            tableData: [],
             password: '',
             comfirmPassword: '',
             wrong:false,
             success: false,
+            medicines:{},
+            medicinesName:{},
         }
     },
 
@@ -218,7 +221,8 @@ new Vue({
         this.getForm();
         this.getRoute();
         this.getFre();
-        this.postPrescription()
+        this.getMedname();
+        this.postPrescription();
    
     },
     methods: {
@@ -292,7 +296,30 @@ new Vue({
 
         activated1() {
             var param2 = localStorage.getItem("searchUid");
-            this.uid = Number(1);
+            this.uid = Number(param2);
+        },
+
+        querySearch(queryString, cb) {
+        var restaurants = this.medicinesName;
+        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+        cb(results);
+        },
+        createFilter(queryString) {
+            return (restaurant) => {
+            return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+            };
+        },
+
+        getMedname(){
+            var that = this;
+            axios.get('http://127.0.0.1:8000/medicinestaticlist/')
+            .then(function (res) {
+                that.medicines = res.data;
+                that.medicinesName = that.medicines.map(item => ({'value':String(item.medName)}));
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         },
 
         postPrescription() {
@@ -363,7 +390,6 @@ new Vue({
         },
 
 
-
         add() {
             this.addMedcineLog();
             this.route='';
@@ -371,9 +397,8 @@ new Vue({
             this.form='';
             this.dose='';
             this.medName='';
-        }
-
-       
+        },
+ 
     }
 })
 </script>

@@ -27,6 +27,7 @@ urlpatterns = [
     url(r'^', include('studentApp.urls')),
     # path('admin/', admin.site.urls),
     path('login/', views.login),
+    path('Assessorlogin/', views.Assessorlogin),
     path('patientConfirm/', views.patientConfirm, name="patientConfirm"),
     path('patientSelect/', views.patientSelect, name="patientSelect"),
     path('prescription/', views.prescription, name="prescription"),

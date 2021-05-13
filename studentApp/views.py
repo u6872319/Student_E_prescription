@@ -287,6 +287,9 @@ def medicinestaticlist(request):
 def login(request):
     return render(request, 'login.html')
 
+def Assessorlogin(request):
+    return render(request, 'Assessorlogin.html')
+
 
 def patientConfirm(request):
     return render(request, 'patientConfirm.html')

@@ -292,6 +292,14 @@ def userlist(request):
 
 
 
+@api_view(['GET'])
+def user_unique(request,username):
+    if request.method == 'GET':
+        user = User.objects.get(username = username)
+        serializer = UserSerializer(user)
+        return Response(serializer.data)
+
+
 def login(request):
     return render(request, 'login.html')
 

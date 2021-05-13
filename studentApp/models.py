@@ -43,6 +43,9 @@ class Prescription(models.Model):
     student = models.ForeignKey(to=Student, on_delete=models.PROTECT, blank=True)
     review = models.TextField(blank=True)
 
+    # def __str__(self):
+    #     return Prescription.id
+
     class Meta:
         get_latest_by = 'id'
 

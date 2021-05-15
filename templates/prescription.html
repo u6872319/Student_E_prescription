@@ -244,7 +244,7 @@ new Vue({
 
         getForm(){
             var that = this;
-                axios.get(`http://127.0.0.1:8000/formlist`)
+                axios.get(`/formlist`)
                 .then(function (res) {
                     that.forms = res.data
                 })
@@ -254,7 +254,7 @@ new Vue({
         },
         getRoute(){
             var that = this;
-                axios.get(`http://127.0.0.1:8000/routelist`)
+                axios.get(`/routelist`)
                 .then(function (res) {
                     that.routes = res.data
                 })
@@ -264,7 +264,7 @@ new Vue({
         },
         getFre(){
             var that = this;
-                axios.get(`http://127.0.0.1:8000/frequencylist`)
+                axios.get(`/frequencylist`)
                 .then(function (res) {
                     that.frequencys = res.data
                 })
@@ -275,7 +275,7 @@ new Vue({
 
         getPtient() {
             var that = this;
-            axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
+            axios.get(`/patientlist/${this.param}` , {
             params: {
                 id: this.param
                 }
@@ -312,7 +312,7 @@ new Vue({
 
         getMedname(){
             var that = this;
-            axios.get('http://127.0.0.1:8000/medicinestaticlist/')
+            axios.get('/medicinestaticlist/')
             .then(function (res) {
                 that.medicines = res.data;
                 that.medicinesName = that.medicines.map(item => ({'value':String(item.medName)}));
@@ -326,7 +326,7 @@ new Vue({
             var that = this;
              axios({
                 method:'PUT',
-                url:`http://127.0.0.1:8000/prescriptionlist/`,
+                url:`/prescriptionlist/`,
 
                 data:{
                     pid: this.param,
@@ -346,7 +346,7 @@ new Vue({
             var that = this;
              axios({
                 method:'PUT',
-                url:`http://127.0.0.1:8000/medicineloglist/`,
+                url:`/medicineloglist/`,
                 data:{
                     preid: this.preid,
                     medEdited: this.medName,
@@ -368,7 +368,7 @@ new Vue({
             var that = this;
              axios({
                 method:'post',
-                url:`http://127.0.0.1:8000/prebasedmedicinelog/`,
+                url:`/prebasedmedicinelog/`,
                 data:{
                     preid:this.preid,
                 }})
@@ -381,7 +381,7 @@ new Vue({
         },
 
         deleteMedcineLog(id) {
-                axios.delete(`http://127.0.0.1:8000/medicineloglist/${id}`)
+                axios.delete(`/medicineloglist/${id}`)
                 .then(function (res) {
                 })
                 .catch(function (error) {

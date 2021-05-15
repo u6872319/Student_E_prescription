@@ -81,7 +81,7 @@
       },
       studentPost() {
         var that = this;
-        axios.get(`http://127.0.0.1:8000/studentlist/${this.form.uid}`)
+        axios.get(`/studentlist/${this.form.uid}`)
           .then(function (res) {
            localStorage.setItem("searchUid", JSON.stringify(res.data.id));
            that.comfirmPassword = res.data.password;

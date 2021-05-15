@@ -51,7 +51,7 @@
         handleClick(row) {
             this.uid=row.uid;
             console.log(row),
-            window.location.href = `http://127.0.0.1:8000/detail`;
+            window.location.href = `{% url 'detail'%}`;
             this.search();
         },
         getAllStudents() {

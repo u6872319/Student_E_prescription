@@ -93,13 +93,8 @@
             <div class="feedback">
                 <el-form ref="form" :model="form" label-width="120px">
                     <el-form-item label="Mark: ">
-                        <el-select v-model="form.mark" placeholder="Please select a mark">
-                        <el-option label="HD" value="HD"></el-option>
-                        <el-option label="D" value="D"></el-option>
-                        <el-option label="C" value="C"></el-option>
-                        <el-option label="P" value="P"></el-option>
-                        <el-option label="F" value="F"></el-option>
-                        </el-select>
+                        <el-input v-model="form.mark">
+                        </el-input>
                     </el-form-item>
                     <el-form-item label="Comments: ">
                         <el-input type="textarea" v-model="form.comment"></el-input>
@@ -123,19 +118,7 @@ new Vue({
     delimiters:['{[', ']}'],
     data: function() {
         return { 
-            tableData: [{
-                medicineName:'DIMETHICONE',
-                dose:'1mg',
-                form:'20%',
-                frequency:'1g/d',
-                route:'Cream',
-            }, {
-                medicineName:'DIMETHICONE',
-                dose:'1mg',
-                form:'20%',
-                frequency:'1g/d',
-                route:'Cream',
-            }],
+            tableData: [],
             form: {
                 mark:'',
                 comment:'',
@@ -155,13 +138,18 @@ new Vue({
     methods: {
         onSubmit() {
             this.comment();
+            this.sendEmail();
+        },
+
+        sendEmail() {
+            location=`mailto:${this.uid}@anu.edu.au?subject=Prescription&body=Mark:  + ${this.form.mark} + , comment: +${this.form.comment}`
         },
   
         getMessage() {
            var that = this;
              axios({
                 method:'post',
-                url:`http://127.0.0.1:8000/studentbasedpres/`,
+                url:`/studentbasedpres/`,
                 data:{
                     uid:this.uid,
                 }})
@@ -178,7 +166,7 @@ new Vue({
         comment() {
             axios({
                 method:'PATCH',
-                url:`http://127.0.0.1:8000/prescriptionlist/`,
+                url:`/prescriptionlist/`,
 
                 data:{
                     preid: this.preid,

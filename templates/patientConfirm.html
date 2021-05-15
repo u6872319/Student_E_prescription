@@ -103,7 +103,7 @@
             },
             getPtient() {
                 var that = this;
-                axios.get(`http://127.0.0.1:8000/patientlist/${this.param}` , {
+                axios.get(`/patientlist/${this.param}` , {
                 params: {
                     id: this.param
                     }
@@ -122,7 +122,7 @@
             patientPost() {
                 axios({
                 method:'PATCH',
-                url:`http://127.0.0.1:8000/patientlist/${this.patient.id}`,
+                url:`/patientlist/${this.patient.id}`,
 
                 data:{
                     weight: this.form.weight,

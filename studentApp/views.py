@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.http import HttpResponse
+#from django.http import HttpResponse
 # from .resources import MedicineStaticResources
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -7,11 +7,7 @@ from rest_framework.response import Response
 from django.contrib.auth.models import User
 from .models import MedicineStatic, Patient, Form, Frequency, Route, Student, Prescription, MedicineLog, Marker
 from .serializers import MedicineStaticSerializer,PatientSerializer,FormSerializer,FrequencySerializer,RouteSerializer,StudentSerializer, MedicineLogSerializer,PrescriptionSerializer,UserSerializer, MarkerSerializer
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
-#from drf_multiple_model.views import FlatMultipleModelAPIView
-from rest_framework.permissions import AllowAny
+
 
 
 # Create your views here.

@@ -1,7 +1,0 @@
-Django
-django-import-export
-django-rest-multiple-models
-djangorestframework
-views
-gunicorn
-django-heroku

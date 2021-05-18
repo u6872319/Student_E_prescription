@@ -1,0 +1,25 @@
+body {
+    font-family: "Times New Roman", Times, serif;
+    margin-top: 200px;
+    font-size: 2em;
+}
+
+.title{
+font-weight: bold;
+font-family: Helvetical;
+text-align: center;
+margin-bottom: 50px;
+}
+
+.center{
+    margin-left: 23%;
+}
+
+.el-table {
+    font-size: 22px !important;
+  }
+
+.el-button--medium {
+    font-size: 22px !important;
+    padding-left: 20px;
+}

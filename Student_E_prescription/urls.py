@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
+from django.http import HttpResponse
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
@@ -25,6 +26,7 @@ urlpatterns = [
     #path('', views.index),
     #url(r'^export-csv/$', views.export, name='export')
     url(r'^', include('studentApp.urls')),
+    path('', lambda request: HttpResponse('the cow jumped over the moon')),
     # path('admin/', admin.site.urls),
     path('login/', views.login),
     path('Assessorlogin/', views.Assessorlogin),

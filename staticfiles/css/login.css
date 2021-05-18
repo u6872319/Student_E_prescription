@@ -1,0 +1,38 @@
+body {
+    font-family: "Times New Roman", Times, serif;
+    margin-top: 200px;
+    font-size: 2em;
+}
+
+.title{
+font-weight: bold;
+font-family: Helvetical;
+color:#00F;
+text-align: center;
+margin-bottom: 50px;
+}
+
+.center{
+    display:flex;
+    justify-content:center;
+}
+
+.el-form-item__label {
+    font-size: 22px !important;
+  }
+
+.el-button--medium {
+    font-size: 22px !important;
+    margin-left: 50px;
+}
+
+.el-link--inner {
+    font-size: 20px;
+}
+
+.el-checkbox__label {
+    font-size: 20px !important;
+}
+
+
+

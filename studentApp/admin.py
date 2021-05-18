@@ -36,7 +36,7 @@ class RouteAdmin(ImportExportModelAdmin):
 
 @admin.register(Student)
 class StudentAdmin(ImportExportModelAdmin):
-    list_display = ('id','uid')
+    list_display = ('id','uid','password')
     pass
 
 

@@ -26,7 +26,7 @@ urlpatterns = [
     #path('', views.index),
     #url(r'^export-csv/$', views.export, name='export')
     url(r'^', include('studentApp.urls')),
-    path('', lambda request: HttpResponse('the cow jumped over the moon')),
+    path('', lambda request: HttpResponse('Welcome to Student E-Prescription system')),
     # path('admin/', admin.site.urls),
     path('login/', views.login),
     path('Assessorlogin/', views.Assessorlogin),

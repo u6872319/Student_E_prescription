@@ -33,6 +33,6 @@ urlpatterns = [
     path('patientConfirm/', views.patientConfirm, name="patientConfirm"),
     path('patientSelect/', views.patientSelect, name="patientSelect"),
     path('prescription/', views.prescription, name="prescription"),
-    path('detail/', views.detail, name="detail"),
-    path('Assessor/', views.Assessor, name="Assessor"),
+    path('detailwwwstudentadmin476546/', views.detail, name="detail"),
+    path('Assessor?adminkarleeadmindouble/', views.Assessor, name="Assessor"),
 ]

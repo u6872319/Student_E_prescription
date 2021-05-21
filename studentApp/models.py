@@ -39,10 +39,16 @@ class Student(models.Model):
 
 class Prescription(models.Model):
     #id = models.AutoField(primary_key=True, blank=True)
-    patient = models.ForeignKey(to=Patient, on_delete=models.PROTECT, blank=True)
+    # patient = models.ForeignKey(to=Patient, on_delete=models.PROTECT, blank=True)
     student = models.ForeignKey(to=Student, on_delete=models.PROTECT, blank=True)
+    pid = models.IntegerField(blank=True)
     review = models.TextField(blank=True)
-
+    lastname = models.CharField(max_length=1000, blank=True)
+    firstname = models.CharField(max_length=1000, blank=True)
+    dob = models.DateField(max_length=1000,blank=True)
+    weight = models.CharField(max_length=1000, blank=True)
+    allergen1 = models.CharField(blank=True, max_length=1000)
+    allergy1 = models.CharField(blank=True, max_length=1000)
     # def __str__(self):
     #      return self.student.uid
 

@@ -210,26 +210,27 @@ new Vue({
             success: false,
             medicines:{},
             medicinesName:{},
+            preid:0,
         }
     },
 
     created() { 
         this.activated();
-        this.activated1();
+        this.activated2();
     },
     mounted() {
-        this.getPtient();
         this.getForm();
         this.getRoute();
         this.getFre();
         this.getMedname();
-        this.postPrescription();
+        this.getpre();
    
     },
     methods: {
         handleDelete(index, row) {
             this.deleteMedcineLog(row.id);
             this.getpre();
+            
         },
 
         onSubmit() {
@@ -274,7 +275,7 @@ new Vue({
                 });
         },
 
-        getPtient() {
+        /**getPtient() {
             var that = this;
             axios.get(`/patientlist/${this.param}` , {
             params: {
@@ -287,17 +288,22 @@ new Vue({
             .catch(function (error) {
             console.log(error);
             });
-        },
+        },**/
 
         activated() {
             var param1 = localStorage.getItem("searchParam");
-            this.param = Number(param1);
-            
+            this.param = Number(param1);   
         },
 
         activated1() {
             var param2 = localStorage.getItem("searchUid");
             this.uid = Number(param2);
+        },
+
+        activated2() {
+            var param3 = localStorage.getItem("searchPreid");
+            this.preid = Number(param3);
+            console.log(this.preid);
         },
 
         querySearch(queryString, cb) {
@@ -312,6 +318,18 @@ new Vue({
         },
 
         getMedname(){
+            var that = this;
+            axios.get('/medicinestaticlist/')
+            .then(function (res) {
+                that.medicines = res.data;
+                that.medicinesName = that.medicines.map(item => ({'value':String(item.medName)}));
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
+        },
+
+        getPtient(){
             var that = this;
             axios.get('/medicinestaticlist/')
             .then(function (res) {
@@ -368,13 +386,11 @@ new Vue({
         getpre() {
             var that = this;
              axios({
-                method:'post',
-                url:`/prebasedmedicinelog/`,
-                data:{
-                    preid:this.preid,
-                }})
+                method:'GET',
+                url:`/prescriptionlist/${this.preid}`})
             .then(function (res) {
-            that.tableData = res.data
+            that.patient = res.data;
+            that.comfirmPassword = res.data.student.password;
             })
             .catch(function (error) {
             console.log(error);
@@ -393,6 +409,7 @@ new Vue({
 
         add() {
             this.addMedcineLog();
+            this.getpre();
             this.route='';
             this.frequency= '';
             this.form='';

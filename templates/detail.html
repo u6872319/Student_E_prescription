@@ -158,7 +158,7 @@ new Vue({
                 }})
             .then(function (res) {
             that.tableData = res.data.medicinelogs;
-            that.patient = res.data.prescription.patient;
+            that.patient = res.data.prescription;
             that.preid = res.data.prescription.id;
             })
             .catch(function (error) {
@@ -172,7 +172,7 @@ new Vue({
                 url:`/prescriptionlist/`,
 
                 data:{
-                    preid: this.preid,
+                    preid: Number(this.preid),
                     review: "Mark: " + this.form.mark + ", comment: "+this.form.comment,
                 }
             })

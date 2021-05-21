@@ -88,18 +88,28 @@
             },
             param: 0,
             uid:0,
+            preid:0,
             patient: {},
          }
       },
       created(){  
           this.activated();
+          this.activated1();
       },
       mounted(){
-           this.getPtient()
+           this.getPtient();
       },
       methods: {
             onSubmit(){
-                this.patientPost()
+                this.prePut();
+            },
+            activated1() {
+            var param2 = localStorage.getItem("searchUid");
+            this.uid = Number(param2);
+            },
+            search() {
+            var param = this.preid;
+            localStorage.setItem("searchPreid", JSON.stringify(param));
             },
             getPtient() {
                 var that = this;
@@ -119,7 +129,7 @@
                 var param = localStorage.getItem("searchParam");
                 this.param = Number(param);
             },
-            patientPost() {
+            /**patientPost() {
                 axios({
                 method:'PATCH',
                 url:`/patientlist/${this.patient.id}`,
@@ -140,6 +150,32 @@
             .catch(function (error) {
             console.log(error);
             });
+            },**/
+            prePut() {
+                 var that = this;
+                axios({
+                    method:'PUT',
+                    url:`/prescriptionlist/`,
+
+                    data:{
+                        sid: this.uid,
+                        weight: this.form.weight,
+                        pid: this.param,
+                        allergen1: this.form.allgyName,
+                        allergy1: this.form.allergyDescription,
+                        lastname: this.patient.lastname,
+                        firstname: this.patient.firstname,
+                        dob:this.patient.dob,
+                        review:''
+                    }
+                })
+                .then(function (res) {
+                    localStorage.setItem("searchPreid", JSON.stringify(res.data.id));  
+                })
+                .catch(function (error) {
+                console.log(error);
+                });
+            
             }
             
         }

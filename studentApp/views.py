@@ -48,20 +48,20 @@ def patient_unique(request, pk):
         serializer = PatientSerializer(patient)
         return Response(serializer.data)
 
-    elif request.method == 'PATCH':
-        # patient.weight = request.data['weight']
-        # patient.allergen1 = request.data['allergen1']
-        # patient.allergy1 = request.data['allergy1']
-        # patient.save()
-        if request.data['weight'] == "":
-            serializer = PatientSerializer(patient)
-            return Response(serializer.data)
-
-        serializer = PatientSerializer(patient,data = request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+    # elif request.method == 'PATCH':
+    #     # patient.weight = request.data['weight']
+    #     # patient.allergen1 = request.data['allergen1']
+    #     # patient.allergy1 = request.data['allergy1']
+    #     # patient.save()
+    #     if request.data['weight'] == "":
+    #         serializer = PatientSerializer(patient)
+    #         return Response(serializer.data)
+    #
+    #     serializer = PatientSerializer(patient,data = request.data)
+    #     if serializer.is_valid():
+    #         serializer.save()
+    #         return Response(serializer.data)
+    #     return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -134,11 +134,13 @@ def prescriptionlist(request):
 
     if request.method == 'PUT':
         # get a patient instance
-        patient = Patient.objects.get(id=request.data['pid'])
+        # patient = Patient.objects.get(id=request.data['pid'])
         # get a student instance
         student = Student.objects.get(id=request.data['sid'])
         # create a prescription instance
-        prescription = Prescription.objects.create(patient=patient, student=student)
+        prescription = Prescription.objects.create(student=student, pid = request.data['pid'],review = request.data['review'],
+        lastname=request.data['lastname'], firstname=request.data['firstname'], dob = request.data['dob'],
+        weight = request.data['weight'], allergen1 = request.data['allergen1'], allergy1 = request.data['allergy1'])
         serializer = PrescriptionSerializer(prescription, data=request.data)
         if serializer.is_valid():
             serializer.save()

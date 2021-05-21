@@ -59,10 +59,10 @@ class PrescriptionAdmin(ImportExportModelAdmin):
     def patient_firstname(obj):
         return obj.patient.firstname
 
-    list_display = ('id', prescription_by_uid, patientid, patient_lastname, patient_firstname,'review')
+    list_display = ('id', prescription_by_uid,'lastname', 'firstname','review')
     prescription_by_uid.admin_order_field = 'student_id'
-    patientid.admin_order_field = 'patient_id'
-    patient_lastname.admin_order_field = 'patient'
+    # patientid.admin_order_field = 'patient_id'
+    # patient_lastname.admin_order_field = 'patient'
 
 
 
